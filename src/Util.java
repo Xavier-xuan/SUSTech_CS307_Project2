@@ -1,6 +1,4 @@
 import com.google.common.hash.Hashing;
-
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;

@@ -11,7 +11,6 @@ public class SustcManager implements ISustcManager {
     PreparedStatement itemOfContainerStatement;
     PreparedStatement staffInfoStatement;
 
-
     @Override
     public int getCompanyCount(LogInfo logInfo) {
         if (!login(logInfo)) {
