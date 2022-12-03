@@ -10,6 +10,11 @@ public class ConnectionManager {
     public static String baseUrl = "jdbc:postgresql://" + host + ":" + port + "/" + database + "?currentSchema=" + schema;
 
     /*
+    Other Settings
+     */
+    public static boolean encryptPassword = true;
+
+    /*
     Root User Credentials
      */
     public static String rootUsername = "postgres";

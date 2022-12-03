@@ -1,8 +1,12 @@
 import cs307.project2.interfaces.*;
 
 import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class SustcManager implements ISustcManager {
+    Statement loginStatement;
+
     @Override
     public int getCompanyCount(LogInfo logInfo) {
         return 0;
@@ -41,6 +45,26 @@ public class SustcManager implements ISustcManager {
     @Override
     public StaffInfo getStaffInfo(LogInfo logInfo, String s) {
         return null;
+    }
+
+    private boolean login(LogInfo logInfo){
+        if (logInfo.type() != LogInfo.StaffType.SustcManager){
+            return false;
+        }
+
+        if (loginStatement == null){
+            try {
+                loginStatement = getConnection().prepareStatement("SELECT * FROM sustc_manager WHERE  name = ? AND password = ?");
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        String password;
+
+        if (ConnectionManager.encryptPassword){
+            password =
+        }
+
     }
 
     private Connection getConnection() {
