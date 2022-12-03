@@ -7,7 +7,11 @@ public class ConnectionManager {
     public static String port = "5432";
     public static String database = "postgres";
     public static String schema = "project2";
-    public static String baseUrl = "jdbc:postgresql://" + host + ":" + port + "/" + database + "?currentSchema=" + schema;
+    public static String baseUrl = "jdbc:postgresql://" + host + ":" + port;
+
+    public static void updateBaseUrl(){
+        baseUrl = "jdbc:postgresql://" + host + ":" + port + "/" + database + "?currentSchema=" + schema;
+    }
 
     /*
     Other Settings
@@ -19,7 +23,6 @@ public class ConnectionManager {
      */
     public static String rootUsername = "postgres";
     public static String rootPassword = "postgres";
-
     /*
     Courier Credentials
      */
@@ -107,7 +110,6 @@ public class ConnectionManager {
                 throw new RuntimeException(e);
             }
         }
-
         return companyManagerConnection;
     }
 
