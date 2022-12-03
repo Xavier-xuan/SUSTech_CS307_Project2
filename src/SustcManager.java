@@ -1,6 +1,9 @@
+import com.google.common.hash.Hashing;
 import cs307.project2.interfaces.*;
 
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -47,24 +50,21 @@ public class SustcManager implements ISustcManager {
         return null;
     }
 
-    private boolean login(LogInfo logInfo){
-        if (logInfo.type() != LogInfo.StaffType.SustcManager){
+    private boolean login(LogInfo logInfo) {
+        if (logInfo.type() != LogInfo.StaffType.SustcManager) {
             return false;
         }
 
-        if (loginStatement == null){
+        if (loginStatement == null) {
             try {
                 loginStatement = getConnection().prepareStatement("SELECT * FROM sustc_manager WHERE  name = ? AND password = ?");
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         }
-        String password;
+        String password = Util.autoEncryptPassword(logInfo.password());
 
-        if (ConnectionManager.encryptPassword){
-            password =
-        }
-
+        return false;
     }
 
     private Connection getConnection() {
