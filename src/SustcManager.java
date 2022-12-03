@@ -8,6 +8,7 @@ public class SustcManager implements ISustcManager {
     PreparedStatement shipInfoStatement;
     PreparedStatement itemOfShipStatement;
     PreparedStatement containerInfoStatement;
+    PreparedStatement itemOfContainerStatement;
     PreparedStatement staffInfoStatement;
 
 
@@ -192,18 +193,80 @@ public class SustcManager implements ISustcManager {
 
     @Override
     public ContainerInfo getContainerInfo(LogInfo logInfo, String s) {
-
         if (!login(logInfo)) {
             return null;
         }
 
-        return null;
+        try {
+            if (containerInfoStatement == null) {
+                containerInfoStatement = getConnection().prepareStatement("SELECT * FROM container where container.code = ?");
+            }
+            containerInfoStatement.setString(1, s);
+            ResultSet queryResult = containerInfoStatement.executeQuery();
 
+            if (!queryResult.next()) return null;
+
+            // check whether it is in use
+            if (itemOfContainerStatement == null) {
+                itemOfContainerStatement = getConnection().prepareStatement("SELECT count(*) from item where item.container_code = ? AND item.state != 'Finish'");
+            }
+            itemOfContainerStatement.setString(1, s);
+            ResultSet itemQueryResult = itemOfContainerStatement.executeQuery();
+            itemQueryResult.next();
+            boolean inUse = itemQueryResult.getInt("count") > 0;
+
+            // get its type
+            ContainerInfo.Type type;
+            switch (queryResult.getString("type")) {
+                case "Dry Container":
+                    type = ContainerInfo.Type.Dry;
+                    break;
+                case "Flat Rack Container":
+                    type = ContainerInfo.Type.FlatRack;
+                    break;
+                case "ISO Tank Container":
+                    type = ContainerInfo.Type.ISOTank;
+                    break;
+                case "Open Top Container":
+                    type = ContainerInfo.Type.OpenTop;
+                    break;
+                case "Reefer Container":
+                    type = ContainerInfo.Type.Reefer;
+                    break;
+                default:
+                    type = null;
+
+            }
+
+            ContainerInfo containerInfo = new ContainerInfo(type, queryResult.getString("code"), inUse);
+
+            return containerInfo;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public StaffInfo getStaffInfo(LogInfo logInfo, String s) {
-        return null;
+        if (!login(logInfo)) {
+            return null;
+        }
+        try {
+            if (staffInfoStatement == null) {
+                staffInfoStatement = getConnection().prepareStatement("SELECT * FROM courier where courier.name = ? union SELECT * FROM company_manager where company_name.name = ?");
+            }
+            staffInfoStatement.setString(1, s);
+            staffInfoStatement.setString(1, s);
+
+            ResultSet queryResult = staffInfoStatement.executeQuery();
+            if (!queryResult.next()) return null;
+            boolean isFemale = queryResult.getString("gender").equals("female");
+
+            return new StaffInfo(logInfo, queryResult.getString("company_name"), queryResult.getString("city_name"), isFemale, queryResult.getInt("age"), queryResult.getString("phone_number"));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private boolean login(LogInfo logInfo) {
