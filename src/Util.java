@@ -4,6 +4,10 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -25,5 +29,12 @@ public class Util {
         log.write(info);
         log.close();
         return true;
+    }
+
+    public static boolean itemExists(String itemName, Connection connection) throws SQLException {
+        ResultSet queryResult = connection.createStatement().executeQuery("SELECT  count(*) from item where item.name = '%s'".formatted(itemName));
+        queryResult.next();
+        return queryResult.getInt("count") > 0;
+
     }
 }
