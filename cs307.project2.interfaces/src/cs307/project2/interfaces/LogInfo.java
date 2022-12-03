@@ -1,7 +1,5 @@
 package cs307.project2.interfaces;
 
-import java.io.Serializable;
-
 /*
  * <p>
  * Information of the given user, including his/her name, staff type and password
@@ -9,11 +7,11 @@ import java.io.Serializable;
  * @classname: LogInfo
 */
 
-public record LogInfo(String name, StaffType type, String password) implements Serializable {
+public record LogInfo(String name, StaffType type, String password){
     public enum StaffType {
         SustcManager,
         CompanyManager,
         Courier,
         SeaportOfficer
-    }
+    }    
 }

@@ -1,6 +1,6 @@
 package cs307.project2.interfaces;
 
-public interface IDatabaseManipulation extends ISustcManager, ICourier, ICompanyManager, ISeaportOfficer {
+public interface IDatabaseManipulation {
 	// Your implemented class shall have constructor like:
 	//		Constructor(String database, String root, String pass)
 	// See project description for more details.
