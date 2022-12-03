@@ -32,7 +32,7 @@ CREATE TABLE company_manager
     company_name varchar(50) references company (name)
 );
 
-CREATE TABLE department_manager
+CREATE TABLE sustc_manager
 (
     name         varchar(50) primary key,
     phone_number varchar(50),

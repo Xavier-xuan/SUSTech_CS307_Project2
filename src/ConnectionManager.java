@@ -36,13 +36,13 @@ public class ConnectionManager {
     /*
     Department Manager Credentials
      */
-    public static String departmentManagerUsername = "department_manager";
-    public static String departmentManagerPassword = "department_manager_password";
+    public static String sustcManagerUsername = "sustc_manager";
+    public static String sustcManagerPassword = "sustc_manager_password";
 
     /*
     Temp
      */
-    static Connection rootConnection, courierConnection, officerConnection, companyManagerConnection, departmentManagerConnection;
+    static Connection rootConnection, courierConnection, officerConnection, companyManagerConnection, sustcManagerConnection;
 
     /*
     Getters
@@ -106,17 +106,17 @@ public class ConnectionManager {
         return companyManagerConnection;
     }
 
-    public static Connection getDepartmentManagerConnection() {
+    public static Connection getSustcManagerConnection() {
          /*
         Initialize
          */
-        if (departmentManagerConnection == null) {
+        if (sustcManagerConnection == null) {
             try {
-                departmentManagerConnection = DriverManager.getConnection(baseUrl, departmentManagerUsername, departmentManagerPassword);
+                sustcManagerConnection = DriverManager.getConnection(baseUrl, sustcManagerUsername, sustcManagerPassword);
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         }
-        return departmentManagerConnection;
+        return sustcManagerConnection;
     }
 }

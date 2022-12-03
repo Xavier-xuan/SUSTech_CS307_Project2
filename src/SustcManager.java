@@ -1,5 +1,7 @@
 import cs307.project2.interfaces.*;
 
+import java.sql.Connection;
+
 public class SustcManager implements ISustcManager {
     @Override
     public int getCompanyCount(LogInfo logInfo) {
@@ -39,5 +41,9 @@ public class SustcManager implements ISustcManager {
     @Override
     public StaffInfo getStaffInfo(LogInfo logInfo, String s) {
         return null;
+    }
+
+    private Connection getConnection() {
+        return ConnectionManager.getSustcManagerConnection();
     }
 }
