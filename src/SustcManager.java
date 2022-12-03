@@ -2,17 +2,25 @@ import com.google.common.hash.Hashing;
 import cs307.project2.interfaces.*;
 
 import java.nio.charset.StandardCharsets;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
-public class SustcManager implements ISustcManager {
-    Statement loginStatement;
-
+public class SustcManager implements ISustcManager  {
+    private PreparedStatement loginStatement;
+    private Connection con;
     @Override
     public int getCompanyCount(LogInfo logInfo) {
-        return 0;
+        try {
+            if (!login(logInfo)) {
+                return -1;
+            }
+            String sql = "select count(*) as cnt from company";
+            Statement query = con.createStatement();
+            return query.executeQuery(sql).getInt("cnt");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+
+        }
     }
 
     @Override
@@ -50,20 +58,28 @@ public class SustcManager implements ISustcManager {
         return null;
     }
 
-    private boolean login(LogInfo logInfo) {
+    private boolean login(LogInfo logInfo) throws SQLException {
         if (logInfo.type() != LogInfo.StaffType.SustcManager) {
             return false;
         }
+        if (this.con == null) {
+            this.con = getConnection();
+        }
 
-        if (loginStatement == null) {
+        if (this.loginStatement == null) {
             try {
-                loginStatement = getConnection().prepareStatement("SELECT * FROM sustc_manager WHERE  name = ? AND password = ?");
+                this.loginStatement = con.prepareStatement("SELECT * FROM sustc_manager WHERE  name = ? AND password = ?");
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         }
         String password = Util.autoEncryptPassword(logInfo.password());
-
+        this.loginStatement.setString(1, logInfo.name());
+        this.loginStatement.setString(2,password);
+        ResultSet result = loginStatement.executeQuery();
+        if (result.next()) {
+            return true;
+        }
         return false;
     }
 
