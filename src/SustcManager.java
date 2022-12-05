@@ -29,15 +29,12 @@ public class SustcManager implements ISustcManager {
 
     @Override
     public int getCityCount(LogInfo logInfo) {
-        if (!login(logInfo)) {
-            return -1;
-        }
+        if (!login(logInfo)) return -1;
         try {
             Statement statement = getConnection().createStatement();
             ResultSet result = statement.executeQuery("SELECT count(*) as city_count FROM (select name from city union select name from port_city)");
             result.next();
             return result.getInt("city_count");
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -50,9 +47,9 @@ public class SustcManager implements ISustcManager {
         }
         try {
             Statement statement = getConnection().createStatement();
-            ResultSet result = statement.executeQuery("SELECT count(*) as city_count FROM courier");
+            ResultSet result = statement.executeQuery("SELECT count(*) as courier_count FROM courier");
             result.next();
-            return result.getInt("city_count");
+            return result.getInt("courier_count");
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -84,7 +81,6 @@ public class SustcManager implements ISustcManager {
             if (itemInfoStatement == null) {
                 itemInfoStatement = getConnection().prepareStatement("SELECT * FROM item where item.name = ?");
             }
-
             itemInfoStatement.setString(1, s);
             ResultSet queryResult = itemInfoStatement.executeQuery();
             if (!queryResult.next()) {

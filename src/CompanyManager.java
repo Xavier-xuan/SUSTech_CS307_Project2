@@ -17,22 +17,52 @@ public class CompanyManager implements ICompanyManager {
     PreparedStatement setItemWaitForCheckingStatement;
 
     @Override
-    public double getImportTaxRate(LogInfo logInfo, String s, String s1) {
+    public double getImportTaxRate(LogInfo logInfo, String city, String itemClass) {
         if (!login(logInfo)) return -1;
-
-        return 0;
+        try {
+            if (importTaxRateStatement == null) {
+                importTaxRateStatement = getConnection().prepareStatement("SELECT import_tax, price from item where type = ? and import_city = ? limit 1");
+            }
+            importTaxRateStatement.setString(1, itemClass);
+            importTaxRateStatement.setString(2,city);
+            ResultSet result = importTaxRateStatement.executeQuery();
+            if (result.next()) {
+                double price = result.getDouble("price");
+                double tax = result.getDouble("import_tax");
+                return tax/price;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return -1;
     }
 
     @Override
-    public double getExportTaxRate(LogInfo logInfo, String s, String s1) {
+    public double getExportTaxRate(LogInfo logInfo, String city, String itemClass) {
         if (!login(logInfo)) return -1;
-
-        return 0;
+        try {
+            if (exportTaxRateStatement == null) {
+                exportTaxRateStatement = getConnection().prepareStatement("SELECT export_tax, price from item where type = ? and export_city = ? limit 1");
+            }
+            exportTaxRateStatement.setString(1, itemClass);
+            exportTaxRateStatement.setString(2,city);
+            ResultSet result = exportTaxRateStatement.executeQuery();
+            if (result.next()) {
+                double price = result.getDouble("price");
+                double tax = result.getDouble("export_tax");
+                return tax/price;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return -1;
     }
 
     @Override
-    public boolean loadItemToContainer(LogInfo logInfo, String s, String s1) {
+    public boolean loadItemToContainer(LogInfo logInfo, String itemName, String containerCode) {
         if (!login(logInfo)) return false;
+
+        
 
         return false;
     }
@@ -78,10 +108,8 @@ public class CompanyManager implements ICompanyManager {
             if (loginStatement == null) {
                 loginStatement = getConnection().prepareStatement("SELECT * FROM company_manager WHERE  name = ? AND password = ?");
             }
-
             loginStatement.setString(1, logInfo.name());
             loginStatement.setString(2, password);
-
             ResultSet result = loginStatement.executeQuery();
             return result.next();
 

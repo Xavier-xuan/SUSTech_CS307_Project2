@@ -166,6 +166,6 @@ public class Courier implements ICourier {
     }
 
     private Connection getConnection() {
-        return ConnectionManager.getCompanyManagerConnection();
+        return ConnectionManager.getCourierConnection();
     }
 }

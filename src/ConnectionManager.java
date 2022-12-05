@@ -55,6 +55,7 @@ public class ConnectionManager {
     /*
     Getters
      */
+
     public static Connection getRootConnection() {
         /*
         Initialize
