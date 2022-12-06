@@ -8,7 +8,6 @@ public class SeaportOfficer implements ISeaportOfficer {
     PreparedStatement setItemStateStatement;
     Statement allItemStatement;
 
-
     @Override
     public String[] getAllItemsAtPort(LogInfo logInfo) {
         if (!login(logInfo)) return new String[0];

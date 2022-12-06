@@ -28,7 +28,6 @@ public class Util {
         log.close();
         return true;
     }
-
     public static boolean itemExists(String itemName, Connection connection) throws SQLException {
         ResultSet queryResult = connection.createStatement().executeQuery(("SELECT * from item where name = " + itemName));
         return queryResult.next();
