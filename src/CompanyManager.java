@@ -62,7 +62,8 @@ public class CompanyManager implements ICompanyManager {
     public boolean loadItemToContainer(LogInfo logInfo, String itemName, String containerCode) {
         if (!login(logInfo)) return false;
 
-        
+
+
 
         return false;
     }

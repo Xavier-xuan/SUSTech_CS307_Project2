@@ -31,11 +31,34 @@ public class SeaportOfficer implements ISeaportOfficer {
     public boolean setItemCheckState(LogInfo logInfo, String itemName, boolean success) {
         if (!login(logInfo)) return false;
         try {
+            Statement check = getConnection().createStatement();
+            ResultSet rel = check.executeQuery(("SELECT state from item where name = " + itemName));
             if (setItemStateStatement==null) {
                 setItemStateStatement = getConnection().prepareStatement("UPDATE item SET state = ? where name = ?");
             }
-            setItemStateStatement.setBoolean(1,success);
             setItemStateStatement.setString(2,itemName);
+
+            if (!rel.next()) return false;
+            int state = Util.stateToInt(rel.getString("state"));
+            switch (state) {
+                default -> {
+                    return false;
+                }
+                case 3 -> {
+                    if (success) {
+                        setItemStateStatement.setString(1, Util.intToState(4));
+                    } else {
+                        setItemStateStatement.setString(1, Util.intToState(12));
+                    }
+                }
+                case 8 -> {
+                    if (success) {
+                        setItemStateStatement.setString(1, Util.intToState(9));
+                    } else {
+                        setItemStateStatement.setString(1, Util.intToState(13));
+                    }
+                }
+            }
             return setItemStateStatement.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
