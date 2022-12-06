@@ -1,3 +1,5 @@
+package SUSTech_CS307_Project2;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;

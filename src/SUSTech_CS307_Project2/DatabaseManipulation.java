@@ -1,3 +1,5 @@
+package SUSTech_CS307_Project2;
+
 import cs307.project2.interfaces.IDatabaseManipulation;
 
 import java.sql.Connection;

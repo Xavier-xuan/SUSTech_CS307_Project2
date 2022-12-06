@@ -1,3 +1,5 @@
+package SUSTech_CS307_Project2;
+
 import cs307.project2.interfaces.ICourier;
 import cs307.project2.interfaces.ItemInfo;
 import cs307.project2.interfaces.ItemState;

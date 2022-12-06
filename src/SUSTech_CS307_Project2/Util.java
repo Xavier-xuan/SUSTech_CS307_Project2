@@ -1,9 +1,13 @@
+package SUSTech_CS307_Project2;
+
 import com.google.common.hash.Hashing;
+import cs307.project2.interfaces.LogInfo;
+import spark.Request;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -73,5 +77,30 @@ public class Util {
             case 13 -> state = "Import Check Fail";
         }
         return state;
+    }
+
+    public static LogInfo getLogInfo(Request request) {
+        String username = request.headers("username");
+        String password = request.headers("password");
+        String roleText = request.headers("role");
+        LogInfo.StaffType role;
+
+        switch (roleText) {
+            case "Courier":
+                role = LogInfo.StaffType.Courier;
+                break;
+            case "Company Manager":
+                role = LogInfo.StaffType.CompanyManager;
+                break;
+            case "Seaport Officer":
+                role = LogInfo.StaffType.SeaportOfficer;
+                break;
+            case "SUSTC Manager":
+                role = LogInfo.StaffType.SustcManager;
+                break;
+            default:
+                role = null;
+        }
+        return new LogInfo(username, role, password);
     }
 }
