@@ -11,6 +11,29 @@ import spark.Response;
 public class CourierHandler {
     static Courier courierInstance;
 
+    /**
+     * @url /courier/new_item
+     * @Header username String
+     * @Header password String
+     * @Header role     String
+     * @Method Post
+     * @RequestParam from_city          String
+     * @RequestParam to_city            String
+     * @RequestParam retrieval_courier  String
+     * @RequestParam delivery_courier   String
+     * @RequestParam export_city        String
+     * @RequestParam export_officer     String
+     * @RequestParam export_tax         float
+     * @RequestParam import_city        String
+     * @RequestParam import_officer     String
+     * @RequestParam import_tax         float
+     * @RequestParam name               String
+     * @RequestParam class              String
+     * @RequestParam price              float
+     * @RequestParam state              String
+     * @Response String
+     * @ResponseExmaple true
+     */
     public static String newItem(Request request, Response response) {
         LogInfo logInfo = Util.getLogInfo(request);
         ItemInfo.RetrievalDeliveryInfo retrievalInfo = new ItemInfo.RetrievalDeliveryInfo(request.queryParams("from_city"), request.queryParams("retrieval_courier"));
@@ -37,6 +60,16 @@ public class CourierHandler {
         return String.valueOf(getCourierInstance().newItem(logInfo, itemInfo));
     }
 
+    /**
+     * @url /courier/set_state/:code
+     * @Header username String
+     * @Header password String
+     * @Header role     String
+     * @Method Post
+     * @RequestParam state              String
+     * @Response String
+     * @ResponseExmaple true
+     */
     public static String setItemState(Request request, Response response) {
         LogInfo logInfo = Util.getLogInfo(request);
         ItemState itemState = Util.stateTextToObject(request.queryParams("state"));
