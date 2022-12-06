@@ -71,10 +71,10 @@ CREATE TABLE ship
 CREATE TABLE item
 (
     name              varchar(50) primary key,
-    price             numeric(10, 2),
+    price             numeric(20, 10),
     type              varchar(50),
-    export_tax        numeric(10, 2),
-    import_tax        numeric(10, 2),
+    export_tax        numeric(20, 10),
+    import_tax        numeric(20, 10),
     export_city       varchar(50) references port_city,
     import_city       varchar(50) references port_city,
     export_officer    varchar(50) references officer (name),
