@@ -256,7 +256,7 @@ public class SustcManager implements ISustcManager {
                 staffInfoStatement = getConnection().prepareStatement("SELECT * FROM courier where courier.name = ? union SELECT * FROM company_manager where company_name.name = ?");
             }
             staffInfoStatement.setString(1, s);
-            staffInfoStatement.setString(1, s);
+            staffInfoStatement.setString(2, s);
 
             ResultSet queryResult = staffInfoStatement.executeQuery();
             if (!queryResult.next()) return null;
