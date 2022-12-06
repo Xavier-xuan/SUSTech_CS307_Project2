@@ -3,10 +3,7 @@ package SUSTech_CS307_Project2;
 import cs307.project2.interfaces.ICompanyManager;
 import cs307.project2.interfaces.LogInfo;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class CompanyManager implements ICompanyManager {
     PreparedStatement loginStatement;
@@ -17,6 +14,7 @@ public class CompanyManager implements ICompanyManager {
     PreparedStatement startSailingStatement;
     PreparedStatement unloadItemStatement;
     PreparedStatement setItemWaitForCheckingStatement;
+    PreparedStatement containerStatement;
 
     @Override
     public double getImportTaxRate(LogInfo logInfo, String city, String itemClass) {
@@ -38,7 +36,6 @@ public class CompanyManager implements ICompanyManager {
         }
         return -1;
     }
-
     @Override
     public double getExportTaxRate(LogInfo logInfo, String city, String itemClass) {
         if (!login(logInfo)) return -1;
@@ -59,10 +56,27 @@ public class CompanyManager implements ICompanyManager {
         }
         return -1;
     }
-
     @Override
     public boolean loadItemToContainer(LogInfo logInfo, String itemName, String containerCode) {
         if (!login(logInfo)) return false;
+        try {
+            if (containerStatement == null) {
+                String sql = "SELECT * FROM item WHERE container_code = ? and (state = '%s' or state = '%s' or state = '%s' or state = '%s')";
+                sql.formatted(Util.intToState(4),Util.intToState(5),Util.intToState(6),Util.intToState(7));
+                containerStatement = getConnection().prepareStatement(sql);
+            }
+            containerStatement.setString(1,containerCode);
+            ResultSet resultSet = containerStatement.executeQuery();
+            if (resultSet.next()) return false;
+
+
+
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
 
 
 
@@ -73,7 +87,6 @@ public class CompanyManager implements ICompanyManager {
     @Override
     public boolean loadContainerToShip(LogInfo logInfo, String s, String s1) {
         if (!login(logInfo)) return false;
-
         return false;
     }
 
