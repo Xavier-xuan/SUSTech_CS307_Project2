@@ -1,6 +1,7 @@
 package SUSTech_CS307_Project2;
 
 import com.google.common.hash.Hashing;
+import cs307.project2.interfaces.ItemState;
 import cs307.project2.interfaces.LogInfo;
 import spark.Request;
 
@@ -32,6 +33,7 @@ public class Util {
         log.close();
         return true;
     }
+
     public static boolean itemExists(String itemName, Connection connection) throws SQLException {
         ResultSet queryResult = connection.createStatement().executeQuery(("SELECT * from item where name = " + itemName));
         return queryResult.next();
@@ -57,6 +59,55 @@ public class Util {
         }
         return stateInt;
     }
+
+    public static ItemState stateTextToObject(String state) {
+        switch (state) {
+
+            case "Picking-up" -> {
+                return ItemState.PickingUp;
+            }
+            case "To-Export Transporting" -> {
+                return ItemState.ToExportTransporting;
+            }
+            case "Export Checking" -> {
+                return ItemState.ExportChecking;
+            }
+            case "Packing to Container" -> {
+                return ItemState.PackingToContainer;
+            }
+            case "Waiting for Shipping" -> {
+                return ItemState.WaitingForShipping;
+            }
+            case "Shipping" -> {
+                return ItemState.Shipping;
+            }
+            case "Unpacking from Container" -> {
+                return ItemState.UnpackingFromContainer;
+            }
+            case "Import Checking" -> {
+                return ItemState.ImportChecking;
+            }
+            case "From-Import Transporting" -> {
+                return ItemState.FromImportTransporting;
+            }
+            case "Delivering" -> {
+                return ItemState.Delivering;
+            }
+            case "Finish" -> {
+                return ItemState.Finish;
+            }
+            case "Export Check Fail" -> {
+                return ItemState.ExportCheckFailed;
+            }
+            case "Import Check Fail" -> {
+                return ItemState.ImportCheckFailed;
+            }
+            default -> {
+                return null;
+            }
+        }
+    }
+
     public static String intToState(int stateInt) {
         String state;
         switch (stateInt) {
@@ -67,7 +118,7 @@ public class Util {
             case 4 -> state = "Packing to Container";
             case 5 -> state = "Waiting for Shipping";
             case 6 -> state = "Shipping";
-            case 7 -> state = "Unpacking from Container" ;
+            case 7 -> state = "Unpacking from Container";
             case 8 -> state = "Import Checking";
             case 9 -> state = "From-Import Transporting";
             case 10 -> state = "Delivering";
