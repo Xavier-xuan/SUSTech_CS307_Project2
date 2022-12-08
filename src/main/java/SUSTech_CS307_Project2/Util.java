@@ -3,6 +3,7 @@ package SUSTech_CS307_Project2;
 import com.google.common.hash.Hashing;
 import cs307.project2.interfaces.ItemState;
 import cs307.project2.interfaces.LogInfo;
+import org.eclipse.jetty.util.log.Log;
 import spark.Request;
 
 import java.io.FileWriter;
@@ -134,6 +135,10 @@ public class Util {
         String password = request.headers("password");
         String roleText = request.headers("role");
         LogInfo.StaffType role;
+
+        if (roleText==null){
+            return new LogInfo("", LogInfo.StaffType.Courier, "");
+        }
 
         switch (roleText) {
             case "Courier":

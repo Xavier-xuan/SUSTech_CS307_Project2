@@ -67,7 +67,7 @@ public class SustcManagerHandler {
     }
 
     /**
-     * @url /sustc_manager/ship_info/:name
+     * @url /sustc_manager/item_info/:name
      * @Header username String
      * @Header password String
      * @Header role     String
@@ -100,7 +100,7 @@ public class SustcManagerHandler {
      */
     public static String getItemInfo(Request request, Response response) {
         LogInfo logInfo = Util.getLogInfo(request);
-        String itemCode = request.params(":code");
+        String itemCode = request.params(":name");
 
         ItemInfo itemInfo = getSustcManagerInstance().getItemInfo(logInfo, itemCode);
         return new Gson().toJson(itemInfo);
