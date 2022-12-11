@@ -3,22 +3,32 @@ package SUSTech_CS307_Project2;
 import cs307.project2.interfaces.ISeaportOfficer;
 import cs307.project2.interfaces.LogInfo;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class SeaportOfficer implements ISeaportOfficer {
     PreparedStatement loginStatement;
-    PreparedStatement setItemStateStatement;
-    Statement allItemStatement;
-
+    PreparedStatement getPortStatement;
+    PreparedStatement allItemStatement;
     @Override
     public String[] getAllItemsAtPort(LogInfo logInfo) {
         if (!login(logInfo)) return new String[0];
         ResultSet resultSet;
         try {
             if (allItemStatement == null) {
-                    allItemStatement = getConnection().createStatement();
+                String sql ="SELECT name FROM item WHERE export_city = ?";
+                allItemStatement = getConnection().prepareStatement(sql);
             }
-            resultSet = allItemStatement.executeQuery("SELECT name FROM item");
+            String sql = "SELECT * FROM officer WHERE name = ?";
+            getPortStatement = getConnection().prepareStatement(sql);
+            getPortStatement.setString(1,logInfo.name());
+            ResultSet officer = getPortStatement.executeQuery();
+            officer.next();
+            String city = officer.getString("port_city_name");
+            allItemStatement.setString(1, city);
+            resultSet = allItemStatement.executeQuery();
             if (resultSet.next()) {
                 return (String[]) resultSet.getArray("name").getArray();
             }
@@ -32,35 +42,27 @@ public class SeaportOfficer implements ISeaportOfficer {
     public boolean setItemCheckState(LogInfo logInfo, String itemName, boolean success) {
         if (!login(logInfo)) return false;
         try {
-            Statement check = getConnection().createStatement();
-            ResultSet rel = check.executeQuery(("SELECT state from item where name = " + itemName));
-            if (setItemStateStatement==null) {
-                setItemStateStatement = getConnection().prepareStatement("UPDATE item SET state = ? where name = ?");
-            }
-            setItemStateStatement.setString(2,itemName);
-
-            if (!rel.next()) return false;
-            int state = Util.stateToInt(rel.getString("state"));
+            if (!Util.itemExists(itemName,getConnection())) return false;
+            int state = Util.getItemState(itemName, getConnection());
             switch (state) {
                 default -> {
                     return false;
                 }
                 case 3 -> {
                     if (success) {
-                        setItemStateStatement.setString(1, Util.intToState(4));
+                        return Util.setItemState(itemName, 4, getConnection());
                     } else {
-                        setItemStateStatement.setString(1, Util.intToState(12));
+                        return Util.setItemState(itemName, 12, getConnection());
                     }
                 }
                 case 8 -> {
                     if (success) {
-                        setItemStateStatement.setString(1, Util.intToState(9));
+                        return Util.setItemState(itemName, 9, getConnection());
                     } else {
-                        setItemStateStatement.setString(1, Util.intToState(13));
+                        return Util.setItemState(itemName, 13, getConnection());
                     }
                 }
             }
-            return setItemStateStatement.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

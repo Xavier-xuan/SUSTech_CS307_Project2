@@ -24,5 +24,10 @@
             <artifactId>slf4j-simple</artifactId>
             <version>1.7.21</version>
         </dependency>
+        <dependency>
+            <groupId>cn.edu.sustech.cse</groupId>
+            <artifactId>SUSTech_CS307_Project2</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 </project>

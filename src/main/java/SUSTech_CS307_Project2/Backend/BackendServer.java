@@ -6,7 +6,6 @@ import static spark.Spark.*;
 public class BackendServer {
     public static void main(String[] args) {
         port(22307);
-
         get("/sustc_manager/company_count", SustcManagerHandler::getCompanyCount);
         get("/sustc_manager/city_count", SustcManagerHandler::getCityCount);
         get("/sustc_manager/courier_count", SustcManagerHandler::getCourierCount);
@@ -30,7 +29,6 @@ public class BackendServer {
         post("/company_manager/ship_start_sailing", CompanyManagerHandler::shipStartSailing);
         post("/company_manager/unload_item", CompanyManagerHandler::unloadItem);
         post("/company_manager/item_wait_for_checking", CompanyManagerHandler::itemWaitForChecking);
-
 
         after((request, response) -> {
             response.header("Content-Type", "application/json");

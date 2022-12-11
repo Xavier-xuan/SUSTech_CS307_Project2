@@ -11,7 +11,6 @@ public class DatabaseManipulation implements IDatabaseManipulation {
         con = ConnectionManager.getRootConnection();
         sql = "";
 
-
         ConnectionManager.updateBaseUrl();
     }
     @Override

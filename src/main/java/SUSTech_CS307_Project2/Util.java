@@ -3,15 +3,12 @@ package SUSTech_CS307_Project2;
 import com.google.common.hash.Hashing;
 import cs307.project2.interfaces.ItemState;
 import cs307.project2.interfaces.LogInfo;
-import org.eclipse.jetty.util.log.Log;
 import spark.Request;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -40,6 +37,24 @@ public class Util {
         return queryResult.next();
     }
 
+    public static int getItemState(String itemName, Connection connection) throws SQLException {
+        ResultSet queryResult = connection.createStatement().executeQuery(("SELECT * from item where name = " + itemName));
+        return stateToInt(queryResult.getString("state"));
+    }
+
+    public static boolean setItemState(String itemName, int state, Connection connection) {
+        try {
+            PreparedStatement setItemStateStatement = connection.prepareStatement("UPDATE item SET state = ? where name = ?");
+            Statement check = connection.createStatement();
+            ResultSet rel = check.executeQuery(("SELECT state from item where name = " + itemName));
+            setItemStateStatement.setString(2,itemName);
+            if (!rel.next()) return false;
+            setItemStateStatement.setString(1, Util.intToState(state));
+            return setItemStateStatement.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
     public static int stateToInt(String state) {
         int stateInt;
         switch (state) {
