@@ -58,6 +58,14 @@ public class ConnectionManager {
     Getters
      */
 
+    public static Connection getDMConnection() {
+        try {
+            return DriverManager.getConnection(baseUrl, rootUsername, rootPassword);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static Connection getRootConnection() {
         /*
         Initialize
