@@ -1,6 +1,3 @@
-CREATE SCHEMA IF NOT EXISTS project2;
-SET SCHEMA 'project2';
-
 CREATE TABLE port_city
 (
     name varchar(50) primary key

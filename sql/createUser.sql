@@ -1,5 +1,3 @@
-SET SCHEMA 'project2';
-
 CREATE USER courier WITH PASSWORD 'courier_password';
 CREATE USER officer WITH PASSWORD 'officer_password';
 CREATE USER company_manager WITH PASSWORD 'company_manager_password';

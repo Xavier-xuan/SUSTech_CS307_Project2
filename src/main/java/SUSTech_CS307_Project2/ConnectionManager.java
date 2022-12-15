@@ -5,14 +5,13 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class ConnectionManager {
-    public static String host = "127.0.0.1";
-    public static String port = "5432";
+    public static String address = "127.0.0.1:5432";
     public static String database = "postgres";
     public static String schema = "project2";
-    public static String baseUrl = "jdbc:postgresql://" + host + ":" + port;
+    public static String baseUrl = "jdbc:postgresql://" + address;
 
     public static void updateBaseUrl(){
-        baseUrl = "jdbc:postgresql://" + host + ":" + port + "/" + database + "?currentSchema=" + schema;
+        baseUrl = "jdbc:postgresql://" + address + "/" + database + "?currentSchema=" + schema;
     }
 
     /*
