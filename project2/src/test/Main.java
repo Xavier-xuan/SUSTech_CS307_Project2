@@ -1,3 +1,5 @@
+package test;
+
 import main.DatabaseManipulation;
 import main.interfaces.LogInfo;
 
@@ -7,7 +9,7 @@ public class Main {
     public static void main(String[] args) {
         DatabaseManipulation dm = new DatabaseManipulation("127.0.0.1:5432/postgres", "postgres", "postgres");
         dm.getShipInfo(logInfo,"c4fda360");
-        int tmp = dm.getCompanyCount(logInfo);
+        boolean tmp = dm.loadItemToContainer(logInfo,"cherry-3a393","c4fda360");
         System.out.print(tmp);
     }
 }
