@@ -15,7 +15,7 @@ public class ConnectionManager {
     /*
     Other Settings
      */
-    public static boolean encryptPassword = true;
+    public static boolean encryptPassword = false;
 
     /*
     Root User Credentials
