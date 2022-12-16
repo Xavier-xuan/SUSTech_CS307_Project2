@@ -46,6 +46,53 @@ public class Util {
         return stateToInt(queryResult.getString("state"));
     }
 
+    public static String getItemCompany(String name) throws SQLException {
+        Connection connection = ConnectionManager.getDMConnection();
+        PreparedStatement pres = connection.prepareStatement("SELECT * from item where name = ?");
+        pres.setString(1,name);
+        ResultSet queryResult = pres.executeQuery();
+        queryResult.next();
+        String courier = queryResult.getString("retrieval_courier");
+        return getCourierCompany(courier);
+    }
+
+    public static String getShipCompany(String shipName) throws SQLException {
+        Connection connection = ConnectionManager.getDMConnection();
+        PreparedStatement pres = connection.prepareStatement("SELECT * from ship where name = ?");
+        pres.setString(1,shipName);
+        ResultSet queryResult = pres.executeQuery();
+        queryResult.next();
+        return (queryResult.getString("company_name"));
+    }
+
+    public static String getCourierCompany(String name) throws SQLException {
+        Connection connection = ConnectionManager.getDMConnection();
+
+        PreparedStatement pres = connection.prepareStatement("SELECT * from courier where name = ?");
+        pres.setString(1,name);
+        ResultSet queryResult = pres.executeQuery();
+        queryResult.next();
+        return (queryResult.getString("company_name"));
+    }
+
+    public static String getCManagerCompany(String name) throws SQLException {
+        Connection connection = ConnectionManager.getDMConnection();
+        PreparedStatement pres = connection.prepareStatement("SELECT * from company_manager where name = ?");
+        pres.setString(1,name);
+        ResultSet queryResult = pres.executeQuery();
+        queryResult.next();
+        return (queryResult.getString("company_name"));
+    }
+
+    public static boolean shipIsUsing(String name) throws SQLException {
+        Connection connection = ConnectionManager.getDMConnection();
+        PreparedStatement pres = connection.prepareStatement("SELECT * from company_manager where name = ?");
+        pres.setString(1,name);
+        ResultSet queryResult = pres.executeQuery();
+        queryResult.next();
+        return (queryResult.getString("company_name"));
+    }
+
     public static boolean setItemState(String itemName, int state, Connection connection) {
         try {
             PreparedStatement setItemStateStatement = connection.prepareStatement("UPDATE item SET state = ? where name = ?");
@@ -187,4 +234,9 @@ public class Util {
         con.setAutoCommit(true);
         System.out.println("All cleaned");
     }
+
+
+
+
+
 }

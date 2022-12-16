@@ -21,7 +21,7 @@ public class LocalJudge {
 
     private static String root = "postgres";
 
-    private static String pass = "123456";
+    private static String pass = "postgres";
 
     private static String recordsCSV = "./data/records.csv";
 

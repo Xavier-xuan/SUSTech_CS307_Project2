@@ -26,7 +26,6 @@ public class DatabaseManipulation implements IDatabaseManipulation {
             Reader tables = new FileReader("sql/createTable.sql");
             Reader users = new FileReader("sql/createUser.sql");
             scriptRunner.runScript(tables);
-
             scriptRunner.setDelimiter(";;;;", false);
             scriptRunner.runScript(users);
 

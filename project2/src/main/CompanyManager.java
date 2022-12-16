@@ -13,6 +13,7 @@ public class CompanyManager implements ICompanyManager {
     PreparedStatement exportTaxRateStatement;
     PreparedStatement loadItemStatement;
     PreparedStatement loadContainerStatement;
+    PreparedStatement loadContainerCheckItemStatement;
     PreparedStatement loadToShipStatement;
     PreparedStatement startSailingStatement;
     PreparedStatement unloadItemStatement;
@@ -67,19 +68,23 @@ public class CompanyManager implements ICompanyManager {
         if (!login(logInfo)) return false;
         try {
             if (loadItemStatement == null) {
-                String sql = "SELECT * FROM item WHERE container_code = ? and (state = ? or state = ? or state = ? or state = ?)";
+                String sql = "SELECT * FROM item WHERE container_code = ? and ( state = ? or state = ? or state = ?)";
                 loadItemStatement = getConnection().prepareStatement(sql);
             }
             loadItemStatement.setString(1,containerCode);
-            loadItemStatement.setString(2,Util.intToState(4));
-            loadItemStatement.setString(3,Util.intToState(5));
-            loadItemStatement.setString(4,Util.intToState(6));
-            loadItemStatement.setString(5,Util.intToState(7));
+            loadItemStatement.setString(2,Util.intToState(5));
+            loadItemStatement.setString(3,Util.intToState(6));
+            loadItemStatement.setString(4,Util.intToState(7));
             ResultSet resultSet = loadItemStatement.executeQuery();
             if (resultSet.next()) return false;
+            if (!Util.itemExists(itemName,getConnection())) return false;
+            if (!Util.getItemCompany(itemName).equals( Util.getCManagerCompany(logInfo.name()))) return false;
+
+
             int nowState = Util.getItemState(itemName,getConnection());
-            if ( nowState != 4 && nowState != 9 ) return false;
-            return Util.setItemState(itemName, nowState+1, getConnection());
+            if (nowState != 4) return false;
+            Util.setItemState(itemName, nowState+1, getConnection());
+            return true;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -88,20 +93,26 @@ public class CompanyManager implements ICompanyManager {
     public boolean loadContainerToShip(LogInfo logInfo, String shipName, String containerCode) {
         if (!login(logInfo)) return false;
         try {
+            //ship is not ready
             if (loadContainerStatement == null) {
-                String sql = "SELECT * FROM item WHERE container_code = ? and (state = ?) and ship_name is null";
-                sql.formatted(Util.intToState(5));
+                String sql = "SELECT * FROM item WHERE ship_name = ? and ( state = ? )";
                 loadContainerStatement = getConnection().prepareStatement(sql);
             }
             loadContainerStatement.setString(1, containerCode);
-            loadContainerStatement.setString(2, Util.intToState(5));
+            loadContainerStatement.setString(2,Util.intToState(6));
             ResultSet resultSet = loadContainerStatement.executeQuery();
-            if (!resultSet.next()) return false;
-            String itemName = resultSet.getString("name");
-            PreparedStatement pre = getConnection().prepareStatement("SELECT * FROM item WHERE ship_name = ? and (state = ?)");
-            pre.setString(1,shipName);
-            pre.setString(2,Util.intToState(5));
             if (resultSet.next()) return false;
+
+            //no container for load
+            if (loadContainerCheckItemStatement == null) {
+                String sql = "SELECT * FROM item WHERE container_code = ? and ship_name is null";
+                loadContainerCheckItemStatement = getConnection().prepareStatement(sql);
+            }
+            loadContainerCheckItemStatement.setString(1, containerCode);
+//            loadContainerCheckItemStatement.setString(2,Util.intToState(5));
+            ResultSet items = loadContainerCheckItemStatement.executeQuery();
+            String itemName="";
+            if (items.next()) itemName = items.getString("name");
 
             if (loadToShipStatement == null) {
                 String sql = "UPDATE item SET ship_name = ? WHERE name = ?";
@@ -109,7 +120,13 @@ public class CompanyManager implements ICompanyManager {
             }
             loadToShipStatement.setString(1, shipName);
             loadToShipStatement.setString(2, itemName);
-            return loadToShipStatement.execute();
+            //no item
+            if (!itemName.isEmpty()) return false;
+            if (!Util.getShipCompany(shipName).equals(Util.getCManagerCompany(logInfo.name()))) return false;
+
+            loadToShipStatement.execute();;
+//            loadToShipStatement.execute();
+            return true;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
