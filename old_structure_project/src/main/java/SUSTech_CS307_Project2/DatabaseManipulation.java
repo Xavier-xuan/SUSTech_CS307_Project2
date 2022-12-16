@@ -1,8 +1,10 @@
-package main.java.SUSTech_CS307_Project2;
+package SUSTech_CS307_Project2;
 
+import SUSTech_CS307_Project2.ConnectionManager;
 import SUSTech_CS307_Project2.Loaders.RecordsLoader;
 import SUSTech_CS307_Project2.Loaders.ScriptRunner;
 import SUSTech_CS307_Project2.Loaders.StaffsLoader;
+import SUSTech_CS307_Project2.Util;
 import cs307.project2.interfaces.IDatabaseManipulation;
 
 import java.io.FileReader;
@@ -10,33 +12,41 @@ import java.io.Reader;
 import java.sql.Connection;
 import java.sql.Statement;
 
-public class DatabaseManipulation implements IDatabaseManipulation extends Courier, SeaportOfficer, SustcManager {
+public class DatabaseManipulation implements IDatabaseManipulation {
     Connection con;
+    public static Courier courierDB = new Courier();
+    public static SeaportOfficer officerDB = new SeaportOfficer();
+    public static CompanyManager managerDB = new CompanyManager();
+    public static SustcManager sustcDB = new SustcManager();;
     String sql;
     public static String dataBaseName = "project2";
     public DatabaseManipulation(String database, String root, String pass) {
-        new BeforeEnd();
-        String [] splitAddress = database.split("/");
-        ConnectionManager.address = splitAddress[0];
+//        new BeforeEnd();
+        ConnectionManager.address = database;
         ConnectionManager.rootUsername = root;
         ConnectionManager.rootPassword = pass;
         ConnectionManager.updateBaseUrl();
-
         con = ConnectionManager.getRootConnection();
         try {
-            Statement createDB = con.createStatement();
-            sql = "CREATE DATABASE " + dataBaseName;
-            createDB.execute(sql);
-            ConnectionManager.address = database;
-            ConnectionManager.updateBaseUrl();
-            sql = "\\c "  + dataBaseName;
-            createDB.execute(sql);
+            con.setAutoCommit(false);
             ScriptRunner scriptRunner = new ScriptRunner(con, false, true);
             Reader tables = new FileReader("sql/createTable.sql");
             Reader users = new FileReader("sql/createUser.sql");
             scriptRunner.runScript(tables);
             scriptRunner.runScript(users);
-            con.commit();
+
+
+
+
+
+
+
+
+
+
+
+
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -61,9 +71,7 @@ class BeforeEnd {//程序退出事件处理
                 System.out.println("程序即将终止...");
                 System.out.println("正在处理最后的事情...");
                 Connection con = ConnectionManager.getRootConnection();
-                String sql = "DROP DATABASE " + DatabaseManipulation.dataBaseName;
-                Statement removeDB = con.createStatement();
-                removeDB.execute(sql);
+                Util.dropTables(con);
                 System.out.println("end...");
             } catch (Exception e) {
                 e.printStackTrace();

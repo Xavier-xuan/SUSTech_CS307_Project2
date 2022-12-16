@@ -7,4 +7,4 @@ GRANT SELECT, UPDATE ON TABLE item,courier TO courier;
 GRANT SELECT, UPDATE ON TABLE item,officer TO officer;
 GRANT SELECT ON TABLE ship TO company_manager;
 GRANT SELECT, UPDATE ON TABLE item,company TO company_manager;
-GRANT SELECT ON ALL TABLES IN SCHEMA project2 TO sustc_manager;
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO sustc_manager;

@@ -5,13 +5,11 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class ConnectionManager {
-    public static String address = "127.0.0.1:5432";
-    public static String database = "postgres";
-    public static String schema = "project2";
+    public static String address = "127.0.0.1:5432/database";
     public static String baseUrl = "jdbc:postgresql://" + address;
 
     public static void updateBaseUrl(){
-        baseUrl = "jdbc:postgresql://" + address + "/" + database + "?currentSchema=" + schema;
+        baseUrl = "jdbc:postgresql://" + address;
     }
 
     /*
@@ -24,6 +22,7 @@ public class ConnectionManager {
      */
     public static String rootUsername = "postgres";
     public static String rootPassword = "postgres";
+
     /*
     Courier Credentials
      */
@@ -76,7 +75,6 @@ public class ConnectionManager {
                 throw new RuntimeException(e);
             }
         }
-
         return rootConnection;
     }
 
@@ -91,7 +89,6 @@ public class ConnectionManager {
                 throw new RuntimeException(e);
             }
         }
-
         return courierConnection;
     }
 

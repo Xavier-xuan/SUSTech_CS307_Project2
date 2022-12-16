@@ -1,25 +1,25 @@
-CREATE TABLE port_city
+CREATE TABLE IF NOT EXISTS port_city
 (
     name varchar(50) primary key
 );
 
-CREATE TABLE city
+CREATE TABLE IF NOT EXISTS city
 (
     name varchar(50) primary key
 );
 
-CREATE TABLE container
+CREATE TABLE IF NOT EXISTS container
 (
     code varchar(50) primary key,
     type varchar(50)
 );
 
-CREATE TABLE company
+CREATE TABLE IF NOT EXISTS company
 (
     name varchar(50) primary key
 );
 
-CREATE TABLE company_manager
+CREATE TABLE IF NOT EXISTS company_manager
 (
     name         varchar(50) primary key,
     phone_number varchar(50),
@@ -29,7 +29,7 @@ CREATE TABLE company_manager
     company_name varchar(50) references company (name)
 );
 
-CREATE TABLE sustc_manager
+CREATE TABLE IF NOT EXISTS sustc_manager
 (
     name         varchar(50) primary key,
     phone_number varchar(50),
@@ -38,7 +38,7 @@ CREATE TABLE sustc_manager
     password     text
 );
 
-CREATE TABLE courier
+CREATE TABLE IF NOT EXISTS courier
 (
     name         varchar(50) primary key,
     phone_number varchar(50),
@@ -49,7 +49,7 @@ CREATE TABLE courier
     city_name    varchar(50) references city (name)
 );
 
-CREATE TABLE officer
+CREATE TABLE IF NOT EXISTS officer
 (
     name           varchar(50) primary key,
     phone_number   varchar(50),
@@ -59,13 +59,13 @@ CREATE TABLE officer
     port_city_name varchar(50) references port_city (name)
 );
 
-CREATE TABLE ship
+CREATE TABLE IF NOT EXISTS ship
 (
     name         varchar(50) primary key,
     company_name varchar(50) references company (name)
 );
 
-CREATE TABLE item
+CREATE TABLE IF NOT EXISTS item
 (
     name              varchar(50) primary key,
     price             numeric(20, 10),
