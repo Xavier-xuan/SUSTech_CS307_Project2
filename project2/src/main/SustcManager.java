@@ -249,16 +249,55 @@ public class SustcManager implements ISustcManager {
         }
         try {
             if (staffInfoStatement == null) {
-                staffInfoStatement = getConnection().prepareStatement("SELECT * FROM courier where courier.name = ? union SELECT * FROM company_manager where company_name.name = ?");
+                staffInfoStatement = getConnection().prepareStatement(
+                        "SELECT " +
+                                "name," +
+                                "phone_number," +
+                                "gender," +
+                                "age," +
+                                "company_name," +
+                                "city_name, " +
+                                "'Courier' as role, " +
+                                "password " +
+                                "FROM courier where courier.name = ? " +
+                        "union SELECT name," +
+                                "phone_number," +
+                                "gender," +
+                                "age," +
+                                "company_name, null as city_name, " +
+                                "'CompanyManager' as role, " +
+                                "password    FROM company_manager where company_manager.name = ?" +
+                        "union SELECT " +
+                                "name," +
+                                "phone_number," +
+                                "gender," +
+                                "age, " +
+                                "null as company_name, " +
+                                "null as city_name, " +
+                                "'SustcManager' as role, " +
+                                "password " +
+                                "from sustc_manager where sustc_manager.name = ?" +
+                        "union SELECT " +
+                                "name," +
+                                "phone_number," +
+                                "gender," +
+                                "age, " +
+                                "null as company_name, " +
+                                "port_city_name as city_name, " +
+                                "'SeaportOfficer' as role, " +
+                                "password " +
+                                "from officer where officer.name = ?");
             }
             staffInfoStatement.setString(1, s);
             staffInfoStatement.setString(2, s);
+            staffInfoStatement.setString(3, s);
+            staffInfoStatement.setString(4, s);
 
             ResultSet queryResult = staffInfoStatement.executeQuery();
             if (!queryResult.next()) return null;
             boolean isFemale = queryResult.getString("gender").equals("female");
-
-            return new StaffInfo(logInfo, queryResult.getString("company_name"), queryResult.getString("city_name"), isFemale, queryResult.getInt("age"), queryResult.getString("phone_number"));
+            LogInfo basicInfo = new LogInfo(queryResult.getString("name"), LogInfo.StaffType.valueOf(queryResult.getString("role")), queryResult.getString("password"));
+            return new StaffInfo(basicInfo, queryResult.getString("company_name"), queryResult.getString("city_name"), isFemale, queryResult.getInt("age"), queryResult.getString("phone_number"));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

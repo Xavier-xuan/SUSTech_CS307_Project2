@@ -1,9 +1,9 @@
 package main.Backend;
 
-import main.*;
-import main.interfaces.*;
-
 import com.google.gson.Gson;
+import main.SeaportOfficer;
+import main.Util;
+import main.interfaces.LogInfo;
 import spark.Request;
 import spark.Response;
 

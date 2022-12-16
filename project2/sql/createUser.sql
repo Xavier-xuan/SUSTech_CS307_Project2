@@ -8,11 +8,12 @@ $do$
             CREATE USER sustc_manager WITH PASSWORD 'sustc_manager_password';
 
             GRANT SELECT, UPDATE ON TABLE item,courier TO courier;
+            GRANT INSERT ON TABLE item,port_city,city,ship,container TO courier;
             GRANT SELECT, UPDATE ON TABLE item,officer TO officer;
             GRANT SELECT ON TABLE ship TO company_manager;
-            GRANT SELECT, UPDATE ON TABLE item,company TO company_manager;
-            GRANT SELECT ON ALL TABLES IN SCHEMA public TO sustc_manager;
+            GRANT SELECT, UPDATE ON TABLE item,company,company_manager TO company_manager;
+            GRANT SELECT ON TABLE city,company,company_manager,container,courier,item,officer,port_city,ship,sustc_manager TO sustc_manager;
         END IF;
     END;
-$do$;
+$do$;;;;
 

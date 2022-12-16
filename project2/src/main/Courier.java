@@ -28,6 +28,9 @@ public class Courier implements ICourier {
                     itemInfo.export().tax() < 0 || itemInfo.$import().city() == null || itemInfo.$import().tax() < 0)
                 return false;
 
+            if (itemInfo.state() != null && itemInfo.state() != ItemState.PickingUp){
+                return false;
+            }
 
             // check whether item exists
             if (Util.itemExists(itemInfo.name(), getConnection())) return false;
@@ -39,9 +42,9 @@ public class Courier implements ICourier {
             if (insertPortCityStatement == null)
                 insertPortCityStatement = getConnection().prepareStatement("INSERT INTO port_city(name) values (?) ON CONFLICT DO NOTHING ");
 
-            insertPortCityStatement.setString(1, itemInfo.retrieval().city());
-            insertPortCityStatement.execute();
-            insertPortCityStatement.setString(1, itemInfo.delivery().city());
+            insertCityStatement.setString(1, itemInfo.retrieval().city());
+            insertCityStatement.execute();
+            insertCityStatement.setString(1, itemInfo.delivery().city());
             insertCityStatement.execute();
 
             insertPortCityStatement.setString(1, itemInfo.export().city());
@@ -65,7 +68,7 @@ public class Courier implements ICourier {
             insertItemStatement.setString(9, itemInfo.delivery().city());
             insertItemStatement.setString(10, itemInfo.retrieval().courier());
             insertItemStatement.setString(11, "Picking-up");
-            return insertItemStatement.execute();
+            return insertItemStatement.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

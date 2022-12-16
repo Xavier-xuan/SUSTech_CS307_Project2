@@ -13,8 +13,6 @@ public class DatabaseManipulation implements IDatabaseManipulation {
     public static SeaportOfficer officerDB = new SeaportOfficer();
     public static CompanyManager managerDB = new CompanyManager();
     public static SustcManager sustcDB = new SustcManager();
-    ;
-    String sql;
 
     public DatabaseManipulation(String database, String root, String pass) {
         ConnectionManager.address = database;
@@ -28,6 +26,8 @@ public class DatabaseManipulation implements IDatabaseManipulation {
             Reader tables = new FileReader("sql/createTable.sql");
             Reader users = new FileReader("sql/createUser.sql");
             scriptRunner.runScript(tables);
+
+            scriptRunner.setDelimiter(";;;;", false);
             scriptRunner.runScript(users);
 
         } catch (Exception e) {
