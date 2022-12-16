@@ -254,18 +254,18 @@ public class RecordsLoader {
             item.setString(1,ItemName);
             item.setDouble(2,Double.parseDouble(ItemPrice));
             item.setString(3,ItemClass);
-            if (!ExportTax.isEmpty()) item.setDouble(4,Double.parseDouble(ExportTax));
-            if (!ImportTax.isEmpty()) item.setDouble(5,Double.parseDouble(ImportTax));
+            item.setDouble(4,Double.parseDouble(ExportTax));
+            item.setDouble(5,Double.parseDouble(ImportTax));
             item.setString(6,ExportCity);
             item.setString(7,ImportCity);
-            if (!ExportOfficer.isEmpty()) item.setString(8,ExportOfficer);
-            if (!ImportOfficer.isEmpty()) item.setString(9,ImportOfficer);
+            item.setString(8,ExportOfficer);
+            item.setString(9,ImportOfficer);
             item.setString(10,RetrievalCity);
             item.setString(11,DeliveryCity);
-            if (!DeliveryCourier.isEmpty()) item.setString(12,DeliveryCourier);
-            if (!RetrievalCourier.isEmpty()) item.setString(13,RetrievalCourier);
-            if (!ContainerCode.isEmpty()) item.setString(14,ContainerCode);
-            if (!ShipName.isEmpty()) item.setString(15,ShipName);
+            item.setString(12,DeliveryCourier);
+            item.setString(13,RetrievalCourier);
+            item.setString(14,ContainerCode);
+            item.setString(15,ShipName);
             item.setString(16,ItemState);
             item.addBatch();
         }

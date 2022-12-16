@@ -12,7 +12,8 @@ import java.sql.PreparedStatement;
 import java.sql.Statement;
 
 public class NormalLoader {
-    public static void loadFromFile(String RecordsCSV, int max) throws Exception {
+    public static void loadFromFile(String RecordsCSV) throws Exception {
+        long startTime = System.currentTimeMillis();
         Connection con = ConnectionManager.getRootConnection();
         Statement operation = con.createStatement();
         con.setAutoCommit(false);
@@ -27,7 +28,6 @@ public class NormalLoader {
 
 
         int cnt;
-        int MAXRECORD = max;
         File csv = new File(RecordsCSV);
         csv.setReadable(true);
         csv.setWritable(true);
@@ -57,7 +57,7 @@ public class NormalLoader {
         //tax cal after insertion
         String[] Info;
 
-        while ((line = br.readLine()) != null && cnt <= MAXRECORD) {
+        while ((line = br.readLine()) != null) {
             ++cnt;
             Info = line.split(",",-1);
 
@@ -137,6 +137,9 @@ public class NormalLoader {
         operation.executeUpdate("alter table port_city enable trigger all;");
         con.commit();
         con.setAutoCommit(true);
+        long endTime = System.currentTimeMillis();
+        System.out.printf("Loaded Records with MultiThread Loader: %d records, speed: %.2f records/s\n", cnt, (float)(cnt*1e3/(endTime-startTime)));
+
     }
 
 //    public static void loadFromString()

@@ -322,7 +322,7 @@ public class LocalJudge {
      */
     @Test
     @Order(15)
-    @Timeout(value = 1500, unit = TimeUnit.MILLISECONDS)
+//    @Timeout(value = 1500, unit = TimeUnit.MILLISECONDS)
     public void loadItemToContainer() {
         Set<Map.Entry<List<Object>, Boolean>> entries = companyManagerUserTest.loadItemToContainer.entrySet();
         for (Map.Entry<List<Object>, Boolean> entry : entries) {

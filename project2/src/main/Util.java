@@ -38,6 +38,15 @@ public class Util {
         return queryResult.next();
     }
 
+    public static boolean itemHasContainer(String itemName) throws SQLException {
+        Connection connection = ConnectionManager.getDMConnection();
+        PreparedStatement pres = connection.prepareStatement("SELECT * from item where name = ? and state = ? and container_code is not null");
+        pres.setString(1,itemName);
+        pres.setString(2,Util.intToState(4));
+        ResultSet queryResult = pres.executeQuery();
+        return queryResult.next();
+    }
+
     public static int getItemState(String itemName, Connection connection) throws SQLException {
         PreparedStatement pres = connection.prepareStatement("SELECT * from item where name = ?");
         pres.setString(1,itemName);
@@ -86,11 +95,25 @@ public class Util {
 
     public static boolean shipIsUsing(String name) throws SQLException {
         Connection connection = ConnectionManager.getDMConnection();
-        PreparedStatement pres = connection.prepareStatement("SELECT * from company_manager where name = ?");
+        PreparedStatement pres = connection.prepareStatement("SELECT * FROM item WHERE ship_name = ? and ( state = ? )");
+        pres.setString(1, name);
+        pres.setString(2,Util.intToState(6));
+        ResultSet resultSet = pres.executeQuery();
+        boolean flag = resultSet.next();
+
+        return flag;
+    }
+    public static boolean containerIsUsing(String name) throws SQLException {
+        Connection connection = ConnectionManager.getDMConnection();
+        PreparedStatement pres = connection.prepareStatement("SELECT * FROM item WHERE container_code = ? and ( state = ? or state = ? or state = ?)");
         pres.setString(1,name);
-        ResultSet queryResult = pres.executeQuery();
-        queryResult.next();
-        return (queryResult.getString("company_name"));
+        pres.setString(2,Util.intToState(5));
+        pres.setString(3,Util.intToState(6));
+        pres.setString(4,Util.intToState(7));
+        ResultSet resultSet = pres.executeQuery();
+        boolean flag = resultSet.next();
+
+        return flag;
     }
 
     public static boolean setItemState(String itemName, int state, Connection connection) {

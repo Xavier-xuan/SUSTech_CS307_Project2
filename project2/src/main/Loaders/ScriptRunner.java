@@ -48,6 +48,7 @@ public class ScriptRunner {
      */
     public ScriptRunner(Connection connection, boolean autoCommit,
                         boolean stopOnError) {
+
         this.connection = connection;
         this.autoCommit = autoCommit;
         this.stopOnError = stopOnError;
@@ -86,6 +87,7 @@ public class ScriptRunner {
      */
     public void runScript(Reader reader) throws IOException, SQLException {
         try {
+            this.logWriter = null;
             boolean originalAutoCommit = connection.getAutoCommit();
             try {
                 if (originalAutoCommit != this.autoCommit) {

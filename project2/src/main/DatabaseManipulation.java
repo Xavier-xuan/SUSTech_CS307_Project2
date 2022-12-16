@@ -21,6 +21,7 @@ public class DatabaseManipulation implements IDatabaseManipulation {
         ConnectionManager.updateBaseUrl();
         con = ConnectionManager.getRootConnection();
         try {
+            new BeforeEnd();
             con.setAutoCommit(false);
             ScriptRunner scriptRunner = new ScriptRunner(con, false, true);
             Reader tables = new FileReader("sql/createTable.sql");
@@ -39,7 +40,7 @@ public class DatabaseManipulation implements IDatabaseManipulation {
         try {
             RecordsLoader.loadFromFile(recordsCSV);
             StaffsLoader.loadFromFile(staffsCSV);
-//            NormalLoader.loadFromFile(recordsCSV, 10);
+//            NormalLoader.loadFromFile(recordsCSV);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
