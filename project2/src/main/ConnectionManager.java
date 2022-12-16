@@ -26,26 +26,26 @@ public class ConnectionManager {
     /*
     Courier Credentials
      */
-    public static String courierUsername = rootUsername;
-    public static String courierPassword = rootPassword;
+    public static String courierUsername = "courier";
+    public static String courierPassword = "courier_password";
 
     /*
     Officer Credentials
      */
-    public static String officerUsername = rootUsername;
-    public static String officerPassword = rootPassword;
+    public static String officerUsername = "officer";
+    public static String officerPassword = "officer_password";
 
     /*
     Company Manager Credentials
      */
-    public static String companyManagerUsername = rootUsername;
-    public static String companyManagerPassword = rootPassword;
+    public static String companyManagerUsername = "company_manager";
+    public static String companyManagerPassword = "company_manager_password";
 
     /*
     Department Manager Credentials
      */
-    public static String sustcManagerUsername = rootUsername;
-    public static String sustcManagerPassword = rootPassword;
+    public static String sustcManagerUsername = "sustc_manager";
+    public static String sustcManagerPassword = "sustc_manager_password";
 
     /*
     Temp
