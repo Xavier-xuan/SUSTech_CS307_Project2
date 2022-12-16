@@ -130,7 +130,7 @@ public class LocalJudge {
 
     @Test
     @Order(2)
-    @Timeout(value = 80000, unit = TimeUnit.MILLISECONDS)
+    @Timeout(value = 8000, unit = TimeUnit.MILLISECONDS)
     public void importData() {
 //        manipulation.$import((recordsCSV), (staffsCSV));
 

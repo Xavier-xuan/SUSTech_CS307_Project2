@@ -32,12 +32,17 @@ public class Util {
     }
 
     public static boolean itemExists(String itemName, Connection connection) throws SQLException {
-        ResultSet queryResult = connection.createStatement().executeQuery(("SELECT * from item where name = " + itemName));
+        PreparedStatement pres = connection.prepareStatement("SELECT * from item where name = ?");
+        pres.setString(1,itemName);
+        ResultSet queryResult = pres.executeQuery();
         return queryResult.next();
     }
 
     public static int getItemState(String itemName, Connection connection) throws SQLException {
-        ResultSet queryResult = connection.createStatement().executeQuery(("SELECT * from item where name = " + itemName));
+        PreparedStatement pres = connection.prepareStatement("SELECT * from item where name = ?");
+        pres.setString(1,itemName);
+        ResultSet queryResult = pres.executeQuery();
+        queryResult.next();
         return stateToInt(queryResult.getString("state"));
     }
 
@@ -45,9 +50,8 @@ public class Util {
         try {
             PreparedStatement setItemStateStatement = connection.prepareStatement("UPDATE item SET state = ? where name = ?");
             Statement check = connection.createStatement();
-            ResultSet rel = check.executeQuery(("SELECT state from item where name = " + itemName));
             setItemStateStatement.setString(2,itemName);
-            if (!rel.next()) return false;
+            if (!itemExists(itemName,connection)) return false;
             setItemStateStatement.setString(1, Util.intToState(state));
             return setItemStateStatement.execute();
         } catch (SQLException e) {

@@ -34,7 +34,7 @@ public class SustcManager implements ISustcManager {
         if (!login(logInfo)) return -1;
         try {
             Statement statement = getConnection().createStatement();
-            ResultSet result = statement.executeQuery("SELECT count(*) as city_count FROM (select name from city union select name from port_city)");
+            ResultSet result = statement.executeQuery("SELECT count(*) as city_count FROM (select name from city union select name from port_city) as cities");
             result.next();
             return result.getInt("city_count");
         } catch (SQLException e) {
@@ -147,7 +147,7 @@ public class SustcManager implements ISustcManager {
             $export = new ItemInfo.ImportExportInfo(queryResult.getString("export_city"), queryResult.getString("export_officer"), queryResult.getDouble("export_tax"));
             $import = new ItemInfo.ImportExportInfo(queryResult.getString("import_city"), queryResult.getString("import_officer"), queryResult.getDouble("import_tax"));
 
-            ItemInfo result = new ItemInfo(queryResult.getString("name"), queryResult.getString("class"), queryResult.getDouble("price"), itemState, retrieval, delivery, $import, $export);
+            ItemInfo result = new ItemInfo(queryResult.getString("name"), queryResult.getString("type"), queryResult.getDouble("price"), itemState, retrieval, delivery, $import, $export);
             return result;
         } catch (
                 SQLException e) {
@@ -165,7 +165,6 @@ public class SustcManager implements ISustcManager {
             if (shipInfoStatement == null) {
                 shipInfoStatement = getConnection().prepareStatement("SELECT * from ship where ship.name = ?");
             }
-
             shipInfoStatement.setString(1, s);
             ResultSet queryResult = shipInfoStatement.executeQuery();
 
@@ -174,13 +173,12 @@ public class SustcManager implements ISustcManager {
             // judge whether the ship is sailing
             boolean isSailing;
             if (itemOfShipStatement == null) {
-                itemOfShipStatement = getConnection().prepareStatement("SELECT count(*) FROM item where item.ship_name = ? AND item.state == 'Shipping'");
+                itemOfShipStatement = getConnection().prepareStatement("SELECT count(*) as count FROM item where item.ship_name = ? AND item.state = 'Shipping'");
             }
             itemOfShipStatement.setString(1, s);
-            ResultSet items = itemInfoStatement.executeQuery();
-            items.next();
-            isSailing = items.getInt("count") > 0;
-
+            ResultSet ships = itemOfShipStatement.executeQuery();
+            ships.next();
+            isSailing = ships.getInt("count") > 0;
             return new ShipInfo(queryResult.getString("name"), queryResult.getString("company_name"), isSailing);
 
         } catch (SQLException e) {
@@ -270,7 +268,6 @@ public class SustcManager implements ISustcManager {
         if (logInfo.type() != LogInfo.StaffType.SustcManager) {
             return false;
         }
-
         String password = Util.autoEncryptPassword(logInfo.password());
         try {
             if (loginStatement == null) {
