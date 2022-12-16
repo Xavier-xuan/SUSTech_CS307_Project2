@@ -2,10 +2,8 @@ package main;
 
 import main.interfaces.*;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
 
 public class SeaportOfficer implements ISeaportOfficer {
     PreparedStatement loginStatement;
@@ -28,13 +26,15 @@ public class SeaportOfficer implements ISeaportOfficer {
             String city = officer.getString("port_city_name");
             allItemStatement.setString(1, city);
             resultSet = allItemStatement.executeQuery();
-            if (resultSet.next()) {
-                return (String[]) resultSet.getArray("name").getArray();
+            ArrayList<String> out = new ArrayList<>();
+            while (resultSet.next()) {
+                out.add(resultSet.getString("name"));
             }
+            String [] Array = new String[out.size()];
+            return out.toArray(Array);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return new String[0];
     }
 
     @Override
@@ -48,20 +48,27 @@ public class SeaportOfficer implements ISeaportOfficer {
                     return false;
                 }
                 case 3 -> {
+                    if(!Util.getOfficerCity(logInfo.name()).equals(Util.getItemExportCity(itemName))) return false;
+
                     if (success) {
-                        return Util.setItemState(itemName, 4, getConnection());
+                        Util.setItemState(itemName, 4, getConnection());
                     } else {
-                        return Util.setItemState(itemName, 12, getConnection());
+                        Util.setItemState(itemName, 12, getConnection());
                     }
+                    Util.setItemExportOfficer(itemName, logInfo.name());
                 }
                 case 8 -> {
+                    if(!Util.getOfficerCity(logInfo.name()).equals(Util.getItemImportCity(itemName))) return false;
+
                     if (success) {
-                        return Util.setItemState(itemName, 9, getConnection());
+                        Util.setItemState(itemName, 9, getConnection());
                     } else {
-                        return Util.setItemState(itemName, 13, getConnection());
+                        Util.setItemState(itemName, 13, getConnection());
                     }
+                    Util.setItemImportOfficer(itemName, logInfo.name());
                 }
             }
+            return true;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

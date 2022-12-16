@@ -136,22 +136,17 @@ public class CompanyManager implements ICompanyManager {
     public boolean shipStartSailing(LogInfo logInfo, String shipName) {
         if (!login(logInfo)) return false;
         try {
-            ResultSet resultSet;
-            PreparedStatement pre = getConnection().prepareStatement("SELECT * FROM item WHERE ship_name = ? and (state = ?)");
-            pre.setString(1,shipName);
-            pre.setString(2,Util.intToState(6));
-            resultSet = pre.executeQuery();
-            if (resultSet.next()) return false;
-
+            if (Util.shipIsUsing(shipName)) return false;
+            if (!Util.getShipCompany(shipName).equals(Util.getCManagerCompany(logInfo.name()))) return false;
             if (startSailingStatement == null) {
                 String sql = "SELECT * FROM item WHERE state = ? and ship_name = ?";
                 startSailingStatement = getConnection().prepareStatement(sql);
             }
             startSailingStatement.setString(1, Util.intToState(5));
             startSailingStatement.setString(2 , shipName);
-            resultSet = startSailingStatement.executeQuery();
-            while (resultSet.next()) {
-                String itemName = resultSet.getString("name");
+            ResultSet items = startSailingStatement.executeQuery();
+            while (items.next()) {
+                String itemName = items.getString("name");
                 Util.setItemState(itemName, 6, getConnection());
             }
             return true;
@@ -173,7 +168,9 @@ public class CompanyManager implements ICompanyManager {
             unloadItemStatement.setString(2 , Util.intToState(6));
             resultSet = unloadItemStatement.executeQuery();
             if (!resultSet.next()) return false;
-            return Util.setItemState(itemName, 7, getConnection());
+            if (!Util.getItemCompany(itemName).equals(Util.getCManagerCompany(logInfo.name()))) return false;
+            Util.setItemState(itemName, 7, getConnection());
+            return true;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -183,16 +180,19 @@ public class CompanyManager implements ICompanyManager {
     public boolean itemWaitForChecking(LogInfo logInfo, String itemName) {
         if (!login(logInfo)) return false;
         try {
-            if (unloadItemStatement == null) {
+            if (setItemWaitForCheckingStatement == null) {
                 String sql = "SELECT * FROM item WHERE name = ? and state = ?";
-                unloadItemStatement = getConnection().prepareStatement(sql);
+                setItemWaitForCheckingStatement = getConnection().prepareStatement(sql);
             }
             ResultSet resultSet;
-            unloadItemStatement.setString(1, itemName);
-            unloadItemStatement.setString(2 , Util.intToState(7));
-            resultSet = unloadItemStatement.executeQuery();
+            setItemWaitForCheckingStatement.setString(1, itemName);
+            setItemWaitForCheckingStatement.setString(2 , Util.intToState(7));
+            resultSet = setItemWaitForCheckingStatement.executeQuery();
             if (!resultSet.next()) return false;
-            return Util.setItemState(itemName, 8, getConnection());
+            if (!Util.getItemCompany(itemName).equals(Util.getCManagerCompany(logInfo.name()))) return false;
+            Util.setItemState(itemName, 8, getConnection());
+            if (true);
+            return true;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

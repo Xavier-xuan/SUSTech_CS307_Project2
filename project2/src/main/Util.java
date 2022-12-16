@@ -93,15 +93,64 @@ public class Util {
         return (queryResult.getString("company_name"));
     }
 
+    public static String getOfficerCity(String name) throws SQLException {
+        Connection connection = ConnectionManager.getDMConnection();
+        PreparedStatement pres = connection.prepareStatement("SELECT * from officer where name = ?");
+        pres.setString(1,name);
+        ResultSet queryResult = pres.executeQuery();
+        queryResult.next();
+        return (queryResult.getString("port_city_name"));
+    }
+
+    public static String getItemExportCity(String name) throws SQLException {
+        Connection connection = ConnectionManager.getDMConnection();
+        PreparedStatement pres = connection.prepareStatement("SELECT * from item where name = ?");
+        pres.setString(1,name);
+        ResultSet queryResult = pres.executeQuery();
+        queryResult.next();
+        return (queryResult.getString("export_city"));
+    }
+
+    public static String getItemImportCity(String name) throws SQLException {
+        Connection connection = ConnectionManager.getDMConnection();
+        PreparedStatement pres = connection.prepareStatement("SELECT * from item where name = ?");
+        pres.setString(1,name);
+        ResultSet queryResult = pres.executeQuery();
+        queryResult.next();
+        return (queryResult.getString("import_city"));
+    }
+
+    public static void setItemImportOfficer(String item, String officer) throws SQLException {
+        Connection connection = ConnectionManager.getDMConnection();
+        PreparedStatement pres = connection.prepareStatement("UPDATE item set import_officer = ? where name = ?");
+        pres.setString(1,officer);
+        pres.setString(2,item);
+        pres.execute();
+    }
+
+    public static void setItemExportOfficer(String item, String officer) throws SQLException {
+        Connection connection = ConnectionManager.getDMConnection();
+        PreparedStatement pres = connection.prepareStatement("UPDATE item set export_officer = ? where name = ?");
+        pres.setString(1,officer);
+        pres.setString(2,item);
+        pres.execute();
+    }
+
+
+
+
+
+
+
+
+
     public static boolean shipIsUsing(String name) throws SQLException {
         Connection connection = ConnectionManager.getDMConnection();
         PreparedStatement pres = connection.prepareStatement("SELECT * FROM item WHERE ship_name = ? and ( state = ? )");
         pres.setString(1, name);
         pres.setString(2,Util.intToState(6));
         ResultSet resultSet = pres.executeQuery();
-        boolean flag = resultSet.next();
-
-        return flag;
+        return resultSet.next();
     }
     public static boolean containerIsUsing(String name) throws SQLException {
         Connection connection = ConnectionManager.getDMConnection();
@@ -111,9 +160,7 @@ public class Util {
         pres.setString(3,Util.intToState(6));
         pres.setString(4,Util.intToState(7));
         ResultSet resultSet = pres.executeQuery();
-        boolean flag = resultSet.next();
-
-        return flag;
+        return resultSet.next();
     }
 
     public static boolean setItemState(String itemName, int state, Connection connection) {
@@ -139,7 +186,7 @@ public class Util {
             case "Waiting for Shipping" -> stateInt = 5;
             case "Shipping" -> stateInt = 6;
             case "Unpacking from Container" -> stateInt = 7;
-            case "Import Checking" -> stateInt = 8;
+            case "Importing Checking" -> stateInt = 8;
             case "From-Import Transporting" -> stateInt = 9;
             case "Delivering" -> stateInt = 10;
             case "Finish" -> stateInt = 11;
@@ -173,7 +220,7 @@ public class Util {
             case "Unpacking from Container" -> {
                 return ItemState.UnpackingFromContainer;
             }
-            case "Import Checking" -> {
+            case "Importing Checking" -> {
                 return ItemState.ImportChecking;
             }
             case "From-Import Transporting" -> {
@@ -208,7 +255,7 @@ public class Util {
             case 5 -> state = "Waiting for Shipping";
             case 6 -> state = "Shipping";
             case 7 -> state = "Unpacking from Container";
-            case 8 -> state = "Import Checking";
+            case 8 -> state = "Importing Checking";
             case 9 -> state = "From-Import Transporting";
             case 10 -> state = "Delivering";
             case 11 -> state = "Finish";
