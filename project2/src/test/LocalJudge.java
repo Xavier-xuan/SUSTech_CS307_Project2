@@ -27,7 +27,7 @@ public class LocalJudge {
 
     private static String staffsCSV = "./data/staffs.csv";
 
-    private static String manipulationImplClassName = "main.DatabaseManipulation";
+    private static String manipulationImplClassName = "main.DBManipulation";
 
     private static IDatabaseManipulation manipulation = null;
 
@@ -60,15 +60,12 @@ public class LocalJudge {
             con.setAutoCommit(true);
             Statement stmt1 = con.createStatement();
             Statement stmt2 = con.createStatement();
-            Statement stmt3 = con.createStatement();
             ResultSet resultSet = stmt1.executeQuery("SELECT concat('DROP TABLE IF EXISTS ', table_name, ' CASCADE;') FROM information_schema.tables WHERE table_schema = 'public';");
             while (resultSet.next()) {
                 stmt2.executeUpdate(resultSet.getString(1));
             }
-            stmt3.executeUpdate("DROP USER IF EXISTS officer,courier,company_manager, sustc_manager;");
             stmt1.close();
             stmt2.close();
-            stmt3.close();
             con.close();
         } catch (SQLException e) {
             System.err.println("Database connection failed");
@@ -133,15 +130,11 @@ public class LocalJudge {
 
     @Test
     @Order(2)
-    @Timeout(value = 8000, unit = TimeUnit.MILLISECONDS)
+    @Timeout(value = 80000, unit = TimeUnit.MILLISECONDS)
     public void importData() {
-//        manipulation.$import((recordsCSV), (staffsCSV));
-
         try {
-//            manipulation.$import(readFile(recordsCSV), readFile(staffsCSV));
-            manipulation.$import((recordsCSV), (staffsCSV));
-
-        } catch (Exception e) {
+            manipulation.$import(readFile(recordsCSV), readFile(staffsCSV));
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -254,7 +247,7 @@ public class LocalJudge {
      */
     @Test
     @Order(11)
-//    @Timeout(value = 2000, unit = TimeUnit.MILLISECONDS)
+    @Timeout(value = 2000, unit = TimeUnit.MILLISECONDS)
     public void newItem() {
         Set<Map.Entry<List<Object>, Boolean>> entries = courierUserTest.newItem.entrySet();
         Set<Map.Entry<List<Object>, Boolean>> treeSet = new TreeSet<>((o1, o2) -> {
@@ -265,7 +258,6 @@ public class LocalJudge {
         treeSet.addAll(entries);
         for (Map.Entry<List<Object>, Boolean> entry : treeSet) {
             List<Object> params = entry.getKey();
-            System.out.println(((ItemInfo) params.get(1)).name());
             assertEquals(entry.getValue(), manipulation.newItem((LogInfo) params.get(0), (ItemInfo) params.get(1)));
         }
 
@@ -322,7 +314,7 @@ public class LocalJudge {
      */
     @Test
     @Order(15)
-//    @Timeout(value = 1500, unit = TimeUnit.MILLISECONDS)
+    @Timeout(value = 1500, unit = TimeUnit.MILLISECONDS)
     public void loadItemToContainer() {
         Set<Map.Entry<List<Object>, Boolean>> entries = companyManagerUserTest.loadItemToContainer.entrySet();
         for (Map.Entry<List<Object>, Boolean> entry : entries) {

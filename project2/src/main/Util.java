@@ -186,7 +186,7 @@ public class Util {
             case "Waiting for Shipping" -> stateInt = 5;
             case "Shipping" -> stateInt = 6;
             case "Unpacking from Container" -> stateInt = 7;
-            case "Importing Checking" -> stateInt = 8;
+            case "Import Checking" -> stateInt = 8;
             case "From-Import Transporting" -> stateInt = 9;
             case "Delivering" -> stateInt = 10;
             case "Finish" -> stateInt = 11;
@@ -220,7 +220,7 @@ public class Util {
             case "Unpacking from Container" -> {
                 return ItemState.UnpackingFromContainer;
             }
-            case "Importing Checking" -> {
+            case "Import Checking" -> {
                 return ItemState.ImportChecking;
             }
             case "From-Import Transporting" -> {
@@ -255,7 +255,7 @@ public class Util {
             case 5 -> state = "Waiting for Shipping";
             case 6 -> state = "Shipping";
             case 7 -> state = "Unpacking from Container";
-            case 8 -> state = "Importing Checking";
+            case 8 -> state = "Import Checking";
             case 9 -> state = "From-Import Transporting";
             case 10 -> state = "Delivering";
             case 11 -> state = "Finish";
