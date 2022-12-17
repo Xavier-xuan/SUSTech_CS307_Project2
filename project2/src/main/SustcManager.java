@@ -108,7 +108,7 @@ public class SustcManager implements ISustcManager {
                 case "Import Check Fail":
                     itemState = ItemState.ImportCheckFailed;
                     break;
-                case "Importing Checking":
+                case "Import Checking":
                     itemState = ItemState.ImportChecking;
                     break;
                 case "Packing to Container":

@@ -15,7 +15,7 @@ public class SeaportOfficer implements ISeaportOfficer {
         ResultSet resultSet;
         try {
             if (allItemStatement == null) {
-                String sql ="SELECT name FROM item WHERE export_city = ?";
+                String sql ="SELECT name FROM item WHERE (export_city = ? and state = ?) or (import_city = ? and state = ?)";
                 allItemStatement = getConnection().prepareStatement(sql);
             }
             String sql = "SELECT * FROM officer WHERE name = ?";
@@ -24,7 +24,11 @@ public class SeaportOfficer implements ISeaportOfficer {
             ResultSet officer = getPortStatement.executeQuery();
             officer.next();
             String city = officer.getString("port_city_name");
+
             allItemStatement.setString(1, city);
+            allItemStatement.setString(2, Util.intToState(3));
+            allItemStatement.setString(3, city);
+            allItemStatement.setString(4, Util.intToState(8));
             resultSet = allItemStatement.executeQuery();
             ArrayList<String> out = new ArrayList<>();
             while (resultSet.next()) {
