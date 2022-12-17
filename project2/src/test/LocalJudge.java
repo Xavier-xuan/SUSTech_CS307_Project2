@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class LocalJudge {
 
-    private static String database = "localhost:5432/postgres";
+    private static String database = "localhost:5432/project2";
 
     private static String root = "postgres";
 
@@ -272,12 +272,11 @@ public class LocalJudge {
      */
     @Test
     @Order(12)
-//    @Timeout(value = 1600, unit = TimeUnit.MILLISECONDS)
+    @Timeout(value = 1600, unit = TimeUnit.MILLISECONDS)
     public void setItemState() {
         Set<Map.Entry<List<Object>, Boolean>> entries = courierUserTest.setItemState.entrySet();
         for (Map.Entry<List<Object>, Boolean> entry : entries) {
             List<Object> params = entry.getKey();
-            System.out.println((String) params.get(1));
             assertEquals(entry.getValue(), manipulation.setItemState((LogInfo) params.get(0), (String) params.get(1), (ItemState) params.get(2)));
         }
 

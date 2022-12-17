@@ -336,12 +336,11 @@ public class Util {
         return new LogInfo(username, role, password);
     }
 
-    public static void dropTables(Connection con) throws Exception {
-        String sql;
+    public static void dropTableAndUsers(Connection con) throws Exception {
         Statement Statement = con.createStatement();
         con.setAutoCommit(false);
-        sql = "drop table if exists city,company,company_manager,container,courier,item,officer,port_city,ship,sustc_manager";
-        Statement.executeUpdate(sql);
+        Statement.executeUpdate("DROP TABLE IF EXISTS city,company,company_manager,container,courier,item,officer,port_city,ship,sustc_manager");
+        Statement.executeUpdate("DROP USER IF EXISTS courier,officer,company_manager,sustc_manager;");
         con.commit();
         con.setAutoCommit(true);
         System.out.println("All cleaned");
