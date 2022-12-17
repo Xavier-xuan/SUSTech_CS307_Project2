@@ -149,7 +149,6 @@ public class Courier implements ICourier {
         if (logInfo.type() != LogInfo.StaffType.Courier) {
             return false;
         }
-
         String password = Util.autoEncryptPassword(logInfo.password());
         try {
             if (loginStatement == null) {
