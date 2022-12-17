@@ -191,7 +191,7 @@ public class CompanyManager implements ICompanyManager {
             if (!resultSet.next()) return false;
             if (!Util.getItemCompany(itemName).equals(Util.getCManagerCompany(logInfo.name()))) return false;
             Util.setItemState(itemName, 8, getConnection());
-            if (true);
+
             return true;
         } catch (SQLException e) {
             throw new RuntimeException(e);

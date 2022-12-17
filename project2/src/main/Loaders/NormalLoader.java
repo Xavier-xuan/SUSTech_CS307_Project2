@@ -24,9 +24,6 @@ public class NormalLoader {
         operation.executeUpdate("alter table item disable trigger all;");
         operation.executeUpdate("alter table port_city disable trigger all;");
         con.commit();
-
-
-
         int cnt;
         File csv = new File(RecordsCSV);
         csv.setReadable(true);

@@ -7,14 +7,14 @@ import java.io.FileReader;
 import java.io.Reader;
 import java.sql.Connection;
 
-public class DatabaseManipulation implements IDatabaseManipulation {
+public class DBManipulation implements IDatabaseManipulation {
     Connection con;
     public static Courier courierDB = new Courier();
     public static SeaportOfficer officerDB = new SeaportOfficer();
     public static CompanyManager managerDB = new CompanyManager();
     public static SustcManager sustcDB = new SustcManager();
 
-    public DatabaseManipulation(String database, String root, String pass) {
+    public DBManipulation(String database, String root, String pass) {
         ConnectionManager.address = database;
         ConnectionManager.rootUsername = root;
         ConnectionManager.rootPassword = pass;
@@ -27,7 +27,7 @@ public class DatabaseManipulation implements IDatabaseManipulation {
             Reader tables = new FileReader("sql/createTable.sql");
             Reader users = new FileReader("sql/createUser.sql");
             scriptRunner.runScript(tables);
-            scriptRunner.setDelimiter(";;;;", false);
+//            scriptRunner.setDelimiter(";;;;", false);
             scriptRunner.runScript(users);
 
         } catch (Exception e) {
@@ -38,9 +38,8 @@ public class DatabaseManipulation implements IDatabaseManipulation {
     @Override
     public void $import(String recordsCSV, String staffsCSV) {
         try {
-            RecordsLoader.loadFromFile(recordsCSV);
-            StaffsLoader.loadFromFile(staffsCSV);
-//            NormalLoader.loadFromFile(recordsCSV);
+            RecordsLoader.loadFromString(recordsCSV);
+            StaffsLoader.loadFromString(staffsCSV);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
