@@ -33,7 +33,7 @@ public class Util {
 
     public static boolean itemExists(String itemName, Connection connection) throws SQLException {
         PreparedStatement pres = connection.prepareStatement("SELECT * from item where name = ?");
-        pres.setString(1,itemName);
+        pres.setString(1, itemName);
         ResultSet queryResult = pres.executeQuery();
         return queryResult.next();
     }
@@ -41,15 +41,15 @@ public class Util {
     public static boolean itemHasContainer(String itemName) throws SQLException {
         Connection connection = ConnectionManager.getDMConnection();
         PreparedStatement pres = connection.prepareStatement("SELECT * from item where name = ? and state = ? and container_code is not null");
-        pres.setString(1,itemName);
-        pres.setString(2,Util.intToState(4));
+        pres.setString(1, itemName);
+        pres.setString(2, Util.intToState(4));
         ResultSet queryResult = pres.executeQuery();
         return queryResult.next();
     }
 
     public static int getItemState(String itemName, Connection connection) throws SQLException {
         PreparedStatement pres = connection.prepareStatement("SELECT * from item where name = ?");
-        pres.setString(1,itemName);
+        pres.setString(1, itemName);
         ResultSet queryResult = pres.executeQuery();
         queryResult.next();
         return stateToInt(queryResult.getString("state"));
@@ -58,7 +58,7 @@ public class Util {
     public static String getItemCompany(String name) throws SQLException {
         Connection connection = ConnectionManager.getDMConnection();
         PreparedStatement pres = connection.prepareStatement("SELECT * from item where name = ?");
-        pres.setString(1,name);
+        pres.setString(1, name);
         ResultSet queryResult = pres.executeQuery();
         queryResult.next();
         String courier = queryResult.getString("retrieval_courier");
@@ -68,7 +68,7 @@ public class Util {
     public static String getShipCompany(String shipName) throws SQLException {
         Connection connection = ConnectionManager.getDMConnection();
         PreparedStatement pres = connection.prepareStatement("SELECT * from ship where name = ?");
-        pres.setString(1,shipName);
+        pres.setString(1, shipName);
         ResultSet queryResult = pres.executeQuery();
         queryResult.next();
         return (queryResult.getString("company_name"));
@@ -78,7 +78,7 @@ public class Util {
         Connection connection = ConnectionManager.getDMConnection();
 
         PreparedStatement pres = connection.prepareStatement("SELECT * from courier where name = ?");
-        pres.setString(1,name);
+        pres.setString(1, name);
         ResultSet queryResult = pres.executeQuery();
         queryResult.next();
         return (queryResult.getString("company_name"));
@@ -87,7 +87,7 @@ public class Util {
     public static String getCManagerCompany(String name) throws SQLException {
         Connection connection = ConnectionManager.getDMConnection();
         PreparedStatement pres = connection.prepareStatement("SELECT * from company_manager where name = ?");
-        pres.setString(1,name);
+        pres.setString(1, name);
         ResultSet queryResult = pres.executeQuery();
         queryResult.next();
         return (queryResult.getString("company_name"));
@@ -96,7 +96,7 @@ public class Util {
     public static String getOfficerCity(String name) throws SQLException {
         Connection connection = ConnectionManager.getDMConnection();
         PreparedStatement pres = connection.prepareStatement("SELECT * from officer where name = ?");
-        pres.setString(1,name);
+        pres.setString(1, name);
         ResultSet queryResult = pres.executeQuery();
         queryResult.next();
         return (queryResult.getString("port_city_name"));
@@ -105,7 +105,7 @@ public class Util {
     public static String getItemExportCity(String name) throws SQLException {
         Connection connection = ConnectionManager.getDMConnection();
         PreparedStatement pres = connection.prepareStatement("SELECT * from item where name = ?");
-        pres.setString(1,name);
+        pres.setString(1, name);
         ResultSet queryResult = pres.executeQuery();
         queryResult.next();
         return (queryResult.getString("export_city"));
@@ -114,7 +114,7 @@ public class Util {
     public static String getItemImportCity(String name) throws SQLException {
         Connection connection = ConnectionManager.getDMConnection();
         PreparedStatement pres = connection.prepareStatement("SELECT * from item where name = ?");
-        pres.setString(1,name);
+        pres.setString(1, name);
         ResultSet queryResult = pres.executeQuery();
         queryResult.next();
         return (queryResult.getString("import_city"));
@@ -123,42 +123,36 @@ public class Util {
     public static void setItemImportOfficer(String item, String officer) throws SQLException {
         Connection connection = ConnectionManager.getDMConnection();
         PreparedStatement pres = connection.prepareStatement("UPDATE item set import_officer = ? where name = ?");
-        pres.setString(1,officer);
-        pres.setString(2,item);
+        pres.setString(1, officer);
+        pres.setString(2, item);
         pres.execute();
     }
 
     public static void setItemExportOfficer(String item, String officer) throws SQLException {
         Connection connection = ConnectionManager.getDMConnection();
         PreparedStatement pres = connection.prepareStatement("UPDATE item set export_officer = ? where name = ?");
-        pres.setString(1,officer);
-        pres.setString(2,item);
+        pres.setString(1, officer);
+        pres.setString(2, item);
         pres.execute();
     }
-
-
-
-
-
-
-
 
 
     public static boolean shipIsUsing(String name) throws SQLException {
         Connection connection = ConnectionManager.getDMConnection();
         PreparedStatement pres = connection.prepareStatement("SELECT * FROM item WHERE ship_name = ? and ( state = ? )");
         pres.setString(1, name);
-        pres.setString(2,Util.intToState(6));
+        pres.setString(2, Util.intToState(6));
         ResultSet resultSet = pres.executeQuery();
         return resultSet.next();
     }
+
     public static boolean containerIsUsing(String name) throws SQLException {
         Connection connection = ConnectionManager.getDMConnection();
         PreparedStatement pres = connection.prepareStatement("SELECT * FROM item WHERE container_code = ? and ( state = ? or state = ? or state = ?)");
-        pres.setString(1,name);
-        pres.setString(2,Util.intToState(5));
-        pres.setString(3,Util.intToState(6));
-        pres.setString(4,Util.intToState(7));
+        pres.setString(1, name);
+        pres.setString(2, Util.intToState(5));
+        pres.setString(3, Util.intToState(6));
+        pres.setString(4, Util.intToState(7));
         ResultSet resultSet = pres.executeQuery();
         return resultSet.next();
     }
@@ -167,14 +161,15 @@ public class Util {
         try {
             PreparedStatement setItemStateStatement = connection.prepareStatement("UPDATE item SET state = ? where name = ?");
             Statement check = connection.createStatement();
-            setItemStateStatement.setString(2,itemName);
-            if (!itemExists(itemName,connection)) return false;
+            setItemStateStatement.setString(2, itemName);
+            if (!itemExists(itemName, connection)) return false;
             setItemStateStatement.setString(1, Util.intToState(state));
             return setItemStateStatement.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
+
     public static int stateToInt(String state) {
         int stateInt;
         switch (state) {
@@ -194,6 +189,53 @@ public class Util {
             case "Import Check Fail" -> stateInt = 13;
         }
         return stateInt;
+    }
+
+    public static int stateToInt(ItemState state) {
+        switch (state) {
+            default -> {
+                return 0;
+            }
+            case PickingUp -> {
+                return 1;
+            }
+            case ToExportTransporting -> {
+                return 2;
+            }
+            case ExportChecking -> {
+                return 3;
+            }
+            case PackingToContainer -> {
+                return 4;
+            }
+            case WaitingForShipping -> {
+                return 5;
+            }
+            case Shipping -> {
+                return 6;
+            }
+            case UnpackingFromContainer -> {
+                return 7;
+            }
+            case ImportChecking -> {
+                return 8;
+            }
+            case FromImportTransporting -> {
+                return 9;
+            }
+            case Delivering -> {
+                return 10;
+            }
+            case Finish -> {
+                return 11;
+            }
+            case ExportCheckFailed -> {
+                return 12;
+            }
+            case ImportCheckFailed -> {
+                return 13;
+            }
+        }
     }
 
     public static ItemState stateTextToObject(String state) {
@@ -271,7 +313,7 @@ public class Util {
         String roleText = request.headers("role");
         LogInfo.StaffType role;
 
-        if (roleText==null){
+        if (roleText == null) {
             return new LogInfo("", LogInfo.StaffType.Courier, "");
         }
 
@@ -294,7 +336,7 @@ public class Util {
         return new LogInfo(username, role, password);
     }
 
-    public static void dropTables(Connection con) throws Exception{
+    public static void dropTables(Connection con) throws Exception {
         String sql;
         Statement Statement = con.createStatement();
         con.setAutoCommit(false);
@@ -304,9 +346,6 @@ public class Util {
         con.setAutoCommit(true);
         System.out.println("All cleaned");
     }
-
-
-
 
 
 }

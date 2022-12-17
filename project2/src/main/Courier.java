@@ -2,10 +2,7 @@ package main;
 
 import main.interfaces.*;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class Courier implements ICourier {
     PreparedStatement loginStatement;
@@ -15,6 +12,7 @@ public class Courier implements ICourier {
     PreparedStatement insertItemStatement;
     PreparedStatement setDeliveryCourierStatement;
     PreparedStatement setItemStateStatement;
+
 
     @Override
     public boolean newItem(LogInfo logInfo, ItemInfo itemInfo) {
@@ -28,12 +26,24 @@ public class Courier implements ICourier {
                     itemInfo.export().tax() < 0 || itemInfo.$import().city() == null || itemInfo.$import().tax() < 0)
                 return false;
 
-            if (itemInfo.state() != null && itemInfo.state() != ItemState.PickingUp){
+            if (itemInfo.state() != null && itemInfo.state() != ItemState.PickingUp) {
                 return false;
             }
 
             // check whether item exists
             if (Util.itemExists(itemInfo.name(), getConnection())) return false;
+
+            // check if the retrieval city is where the courier works
+            Statement queryWorkingCity = getConnection().createStatement();
+            ResultSet queryResult = queryWorkingCity.executeQuery("SELECT city_name from courier where courier.name = '%s'".formatted(logInfo.name()));
+            if (queryResult.next()) {
+                String workingCity = queryResult.getString("city_name");
+                if (!workingCity.equals(itemInfo.retrieval().city())) {
+                    return false;
+                }
+            } else {
+                return false;
+            }
 
             // insert city and port city if not exist;
             if (insertCityStatement == null)
@@ -55,7 +65,7 @@ public class Courier implements ICourier {
             // insert item
             if (insertItemStatement == null)
                 insertItemStatement = getConnection().prepareStatement("" +
-                        "INSERT INTO item(name, price, type, export_tax, import_tax, export_city, import_city, from_city_name, to_city_name, delivery_courier, state) " +
+                        "INSERT INTO item(name, price, type, export_tax, import_tax, export_city, import_city, from_city_name, to_city_name, retrieval_courier, state) " +
                         "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             insertItemStatement.setString(1, itemInfo.name());
             insertItemStatement.setDouble(2, itemInfo.price());
@@ -66,7 +76,7 @@ public class Courier implements ICourier {
             insertItemStatement.setString(7, itemInfo.$import().city());
             insertItemStatement.setString(8, itemInfo.retrieval().city());
             insertItemStatement.setString(9, itemInfo.delivery().city());
-            insertItemStatement.setString(10, itemInfo.retrieval().courier());
+            insertItemStatement.setString(10, logInfo.name());
             insertItemStatement.setString(11, "Picking-up");
             return insertItemStatement.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -89,57 +99,47 @@ public class Courier implements ICourier {
 
             // check whether the courier has permission
             String stateText;
-            switch (itemState) {
-                case ToExportTransporting:
-                    if ((!queryResult.getString("state").equals("Picking-up")) ||
-                            (!queryResult.getString("retrieval_courier").equals(logInfo.name())))
-                        return false;
+            int currentStateNumber = Util.stateToInt(queryResult.getString("state"));
+            int targetStateNumber = Util.stateToInt(itemState);
+            if (0 < currentStateNumber && currentStateNumber <= 2) {
+                // only can be set to its next state
+                if (targetStateNumber - currentStateNumber != 1) return false;
 
-                    stateText = "To-Export Transporting";
-                    break;
-
-                case ExportChecking:
-                    if ((!queryResult.getString("state").equals("Picking-up")) ||
-                            (!queryResult.getString("state").equals("To-Export Transporting")) ||
-                            (!queryResult.getString("retrieval_courier").equals(logInfo.name())))
-                        return false;
-                    stateText = "Export Checking";
-
-                    break;
-
-                case FromImportTransporting:
-                    if (!queryResult.getString("state").equals("From-Import Transporting"))
-                        return false;
-                    else {
-                        if (setDeliveryCourierStatement == null)
-                            setDeliveryCourierStatement = getConnection().prepareStatement("UPDATE item SET delivery_courier = ? WHERE  item.name = ?");
-                        setDeliveryCourierStatement.setString(1, logInfo.name());
-                        setDeliveryCourierStatement.setString(2, s);
-                        return setDeliveryCourierStatement.executeUpdate() > 0;
-                    }
-                case Delivering:
-                    if ((!queryResult.getString("state").equals("From-Import Transporting"))
-                            || (!queryResult.getString("delivery_courier").equals(logInfo.name())))
-                        return false;
-                    stateText = "Delivering";
-                    break;
-
-                case Finish:
-                    if ((!queryResult.getString("state").equals("From-Import Transporting")) ||
-                            (!queryResult.getString("state").equals("Delivering")) ||
-                            (!queryResult.getString("delivery_courier").equals(logInfo.name())))
-                        return false;
-                    stateText = "Finish";
-                    break;
-                default:
+                // if is not current courier
+                if (queryResult.getString("retrieval_courier") == null || !queryResult.getString("retrieval_courier").equals(logInfo.name()))
                     return false;
+
+
+            } else if (currentStateNumber == 9 && targetStateNumber == 9) { // From-Import Transporting to From-Import Transporting
+                if (queryResult.getString("delivery_courier") != null){
+                    return false;
+                }
+
+                // update courier
+                if (setDeliveryCourierStatement == null)
+                    setDeliveryCourierStatement = getConnection().prepareStatement("UPDATE item SET delivery_courier = ? WHERE  item.name = ?");
+                setDeliveryCourierStatement.setString(1, logInfo.name());
+                setDeliveryCourierStatement.setString(2, s);
+                return setDeliveryCourierStatement.executeUpdate() > 0;
+
+            }else if (9<=currentStateNumber && currentStateNumber <= 10){
+                // only can be set to its next state
+                if (targetStateNumber - currentStateNumber != 1) return false;
+
+                // if is not current courier
+                if (!queryResult.getString("delivery_courier").equals(logInfo.name()))
+                    return false;
+            }else {
+                return false;
             }
 
+            // update state normally
             if (setItemStateStatement == null)
                 setItemStateStatement = getConnection().prepareStatement("UPDATE item SET state = ? where item.name = ?");
-            setItemStateStatement.setString(1, stateText);
+            setItemStateStatement.setString(1, Util.intToState(targetStateNumber));
             setItemStateStatement.setString(2, s);
             return setItemStateStatement.executeUpdate() > 0;
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

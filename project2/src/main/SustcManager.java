@@ -88,50 +88,7 @@ public class SustcManager implements ISustcManager {
             if (!queryResult.next()) {
                 return null;
             }
-            ItemState itemState;
-            switch (queryResult.getString("state")) {
-                case "Delivering":
-                    itemState = ItemState.Delivering;
-                    break;
-                case "Export Check Fail":
-                    itemState = ItemState.ExportCheckFailed;
-                    break;
-                case "Export Checking":
-                    itemState = ItemState.ExportChecking;
-                    break;
-                case "Finish":
-                    itemState = ItemState.Finish;
-                    break;
-                case "From-Import Transporting":
-                    itemState = ItemState.FromImportTransporting;
-                    break;
-                case "Import Check Fail":
-                    itemState = ItemState.ImportCheckFailed;
-                    break;
-                case "Import Checking":
-                    itemState = ItemState.ImportChecking;
-                    break;
-                case "Packing to Container":
-                    itemState = ItemState.PackingToContainer;
-                    break;
-                case "Picking-up":
-                    itemState = ItemState.PickingUp;
-                    break;
-                case "Shipping":
-                    itemState = ItemState.Shipping;
-                    break;
-                case "To-Export Transporting":
-                    itemState = ItemState.ToExportTransporting;
-                    break;
-                case "Unpacking from Container":
-                    itemState = ItemState.UnpackingFromContainer;
-                    break;
-                case "Waiting for Shipping":
-                    itemState = ItemState.WaitingForShipping;
-                    break;
-                default:
-                    itemState = null;
-            }
+            ItemState itemState = Util.stateTextToObject(queryResult.getString("state"));
 
             ItemInfo.RetrievalDeliveryInfo retrieval = new ItemInfo.RetrievalDeliveryInfo(queryResult.getString("from_city_name"), queryResult.getString("retrieval_courier"));
             ItemInfo.RetrievalDeliveryInfo delivery = new ItemInfo.RetrievalDeliveryInfo(queryResult.getString("to_city_name"), queryResult.getString("delivery_courier"));

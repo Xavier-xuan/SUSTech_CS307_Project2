@@ -21,7 +21,7 @@ public class LocalJudge {
 
     private static String root = "postgres";
 
-    private static String pass = "postgres";
+    private static String pass = "123456";
 
     private static String recordsCSV = "./data/records.csv";
 
@@ -272,15 +272,16 @@ public class LocalJudge {
      */
     @Test
     @Order(12)
-    @Timeout(value = 1600, unit = TimeUnit.MILLISECONDS)
+//    @Timeout(value = 1600, unit = TimeUnit.MILLISECONDS)
     public void setItemState() {
         Set<Map.Entry<List<Object>, Boolean>> entries = courierUserTest.setItemState.entrySet();
         for (Map.Entry<List<Object>, Boolean> entry : entries) {
             List<Object> params = entry.getKey();
+            System.out.println((String) params.get(1));
             assertEquals(entry.getValue(), manipulation.setItemState((LogInfo) params.get(0), (String) params.get(1), (ItemState) params.get(2)));
         }
 
-        ItemInfo itemInfo = manipulation.getItemInfo(logInfo, "peach-778ca");
+        ItemInfo itemInfo = manipulation.getItemInfo(logInfo, "newItem1");
         assertEquals(ItemState.ToExportTransporting, itemInfo.state());
     }
 
