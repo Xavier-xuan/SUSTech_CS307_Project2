@@ -310,7 +310,7 @@ public class Util {
     public static LogInfo getLogInfo(Request request) {
         String username = request.headers("username");
         String password = request.headers("password");
-        String roleText = request.headers("role");
+        String roleText = request.headers("role").toString().trim();
         LogInfo.StaffType role;
 
         if (roleText == null) {
@@ -318,16 +318,16 @@ public class Util {
         }
 
         switch (roleText) {
-            case "Courier":
+            case "courier":
                 role = LogInfo.StaffType.Courier;
                 break;
-            case "Company Manager":
+            case "company manager":
                 role = LogInfo.StaffType.CompanyManager;
                 break;
-            case "Seaport Officer":
+            case "seaport officer":
                 role = LogInfo.StaffType.SeaportOfficer;
                 break;
-            case "SUSTC Manager":
+            case "sustc manager":
                 role = LogInfo.StaffType.SustcManager;
                 break;
             default:
