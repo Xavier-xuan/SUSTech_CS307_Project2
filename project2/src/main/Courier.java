@@ -145,7 +145,7 @@ public class Courier implements ICourier {
         }
     }
 
-    private boolean login(LogInfo logInfo) {
+    public boolean login(LogInfo logInfo) {
         if (logInfo.type() != LogInfo.StaffType.Courier) {
             return false;
         }

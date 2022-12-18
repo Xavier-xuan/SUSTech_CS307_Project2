@@ -6,6 +6,8 @@ import static spark.Spark.*;
 public class BackendServer {
     public static void main(String[] args) {
         port(22307);
+        post("/login", AuthHandler::login);
+
         get("/sustc_manager/company_count", SustcManagerHandler::getCompanyCount);
         get("/sustc_manager/city_count", SustcManagerHandler::getCityCount);
         get("/sustc_manager/courier_count", SustcManagerHandler::getCourierCount);

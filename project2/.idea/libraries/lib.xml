@@ -38,6 +38,7 @@
       <root url="jar://$PROJECT_DIR$/lib/websocket-server-9.4.48.v20220622.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/jetty-servlet-9.4.48.v20220622.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/j2objc-annotations-1.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/slf4j-simple-1.7.25.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

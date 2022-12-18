@@ -198,7 +198,7 @@ public class CompanyManager implements ICompanyManager {
         }
     }
 
-    private boolean login(LogInfo logInfo) {
+    public boolean login(LogInfo logInfo) {
         if (logInfo.type() != LogInfo.StaffType.CompanyManager) {
             return false;
         }

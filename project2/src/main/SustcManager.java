@@ -260,7 +260,7 @@ public class SustcManager implements ISustcManager {
         }
     }
 
-    private boolean login(LogInfo logInfo) {
+    public boolean login(LogInfo logInfo) {
         if (logInfo.type() != LogInfo.StaffType.SustcManager) {
             return false;
         }
