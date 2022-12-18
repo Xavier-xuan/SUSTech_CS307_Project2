@@ -13,6 +13,9 @@ public class DBManipulation implements IDatabaseManipulation {
     public static SeaportOfficer officerDB = new SeaportOfficer();
     public static CompanyManager managerDB = new CompanyManager();
     public static SustcManager sustcDB = new SustcManager();
+    public static String tablePath = "data/records.csv";
+    public static String staffPath = "data/staffs.csv";
+
 
     public DBManipulation(String database, String root, String pass) {
         ConnectionManager.address = database;
@@ -40,6 +43,15 @@ public class DBManipulation implements IDatabaseManipulation {
         try {
             RecordsLoader.loadFromString(recordsCSV);
             StaffsLoader.loadFromString(staffsCSV);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void $importFromFile(String recordsCSV, String staffsCSV) {
+        try {
+            RecordsLoader.loadFromFile(recordsCSV);
+            StaffsLoader.loadFromFile(staffsCSV);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
