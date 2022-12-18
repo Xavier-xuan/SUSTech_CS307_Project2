@@ -1,13 +1,16 @@
 package main.Backend;
 
+import main.DBManipulation;
+
 import static spark.Spark.*;
 
 
 public class BackendServer {
     public static void main(String[] args) {
+        DBManipulation dm = new DBManipulation("127.0.0.1/project2","postgres","123456");
+        dm.$importFromFile(dm.tablePath, dm.staffPath);
         port(22307);
         post("/login", AuthHandler::login);
-
         get("/sustc_manager/company_count", SustcManagerHandler::getCompanyCount);
         get("/sustc_manager/city_count", SustcManagerHandler::getCityCount);
         get("/sustc_manager/courier_count", SustcManagerHandler::getCourierCount);
