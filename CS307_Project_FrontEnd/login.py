@@ -62,13 +62,8 @@ def login() :
         else:
             info = ("Wrong Username or Password!")
             flag = True
-    if role == "courier":
-        courier.courier()
-    # elif role == "company manager":
-    #
-    # elif role == "seaport officer":
-    #
-    # elif role == "sustc manager":
+    
+    return username,passwd,role
 
 
 
