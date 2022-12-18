@@ -148,10 +148,9 @@ class BeforeEnd {//程序退出事件处理
         Thread t = new Thread(() -> {
             try {
                 //模拟正常终止前任务
-                System.out.println("程序即将终止...");
-                System.out.println("正在处理最后的事情...");
+                System.out.println("Processing Last Tasks...");
                 Connection con = ConnectionManager.getRootConnection();
-                Util.dropTables(con);
+                Util.dropTableAndUsers(con);
                 System.out.println("end...");
             } catch (Exception e) {
                 e.printStackTrace();

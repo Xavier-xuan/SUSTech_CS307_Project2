@@ -111,10 +111,7 @@ public class CompanyManager implements ICompanyManager {
             ResultSet items = loadContainerCheckItemStatement.executeQuery();
             String itemName="";
             if (!items.next()) return false;
-            System.out.println("flag");
-
             itemName = items.getString("name");
-
             if (loadToShipStatement == null) {
                 String sql = "UPDATE item SET ship_name = ?, state = ?  WHERE name = ?";
                 loadToShipStatement = getConnection().prepareStatement(sql);
