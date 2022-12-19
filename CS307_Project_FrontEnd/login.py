@@ -31,7 +31,7 @@ def login() :
         elif op == '4':
             role = "sustc manager"
         elif op == 'X':
-            u.exit()
+            u.exiting()
         else:
             info = "<Wrong Selection>"
             flag = True

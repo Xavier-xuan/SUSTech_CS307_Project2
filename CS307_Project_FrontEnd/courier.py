@@ -52,7 +52,7 @@ def courier(username, passwd):
         elif op == 'X':
             flag = False
         elif op == 'Q':
-            u.exit()
+            u.exiting()
         else:
             info = ("<Wrong Selection>")
 

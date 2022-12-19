@@ -20,7 +20,7 @@ def checkResult(result):
     else:
         print("Failed!")
     time.sleep(1)
-def exit():
+def exiting():
     print("Exiting...")
     time.sleep(1)
-    sys.exit()
+    exit()
