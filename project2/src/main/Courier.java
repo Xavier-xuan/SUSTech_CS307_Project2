@@ -26,12 +26,28 @@ public class Courier implements ICourier {
                     itemInfo.export().tax() < 0 || itemInfo.$import().city() == null || itemInfo.$import().tax() < 0)
                 return false;
 
-            if (itemInfo.state() != null && itemInfo.state() != ItemState.PickingUp) {
+            // state must be null
+            if (itemInfo.state() != null) {
                 return false;
             }
 
             // check whether item exists
             if (Util.itemExists(itemInfo.name(), getConnection())) return false;
+
+            // check whether the export city is the same
+            if (itemInfo.export().city() == itemInfo.$import().city()) {
+                return false;
+            }
+
+            // check whether the tax rate is correct
+            double exportTaxRate = Util.getExportTaxRate(getConnection(), itemInfo.export().city(), itemInfo.$class());
+            double importTaxRate = Util.getImportTaxRate(getConnection(), itemInfo.$import().city(), itemInfo.$class());
+            double actualExportTaxRate = itemInfo.export().tax() / itemInfo.price();
+            double actualImportTaxRate = itemInfo.$import().tax() / itemInfo.price();
+            if (exportTaxRate != -1 && Math.abs(exportTaxRate - actualExportTaxRate) > 0.0001) return false;
+            if (importTaxRate != -1 && Math.abs(importTaxRate - actualImportTaxRate) > 0.0001) return false;
+
+
 
             // check if the retrieval city is where the courier works
             Statement queryWorkingCity = getConnection().createStatement();
@@ -111,7 +127,19 @@ public class Courier implements ICourier {
 
 
             } else if (currentStateNumber == 9 && targetStateNumber == 9) { // From-Import Transporting to From-Import Transporting
-                if (queryResult.getString("delivery_courier") != null){
+                if (queryResult.getString("delivery_courier") != null) {
+                    return false;
+                }
+
+                // check if the delivery city is where the courier works
+                Statement queryWorkingCity = getConnection().createStatement();
+                ResultSet cityResult = queryWorkingCity.executeQuery("SELECT city_name from courier where courier.name = '%s'".formatted(logInfo.name()));
+                if (cityResult.next()) {
+                    String workingCity = cityResult.getString("city_name");
+                    if (!workingCity.equals(queryResult.getString("to_city_name"))) {
+                        return false;
+                    }
+                } else {
                     return false;
                 }
 
@@ -122,14 +150,14 @@ public class Courier implements ICourier {
                 setDeliveryCourierStatement.setString(2, s);
                 return setDeliveryCourierStatement.executeUpdate() > 0;
 
-            }else if (9<=currentStateNumber && currentStateNumber <= 10){
+            } else if (9 <= currentStateNumber && currentStateNumber <= 10) {
                 // only can be set to its next state
                 if (targetStateNumber - currentStateNumber != 1) return false;
 
                 // if is not current courier
                 if (!queryResult.getString("delivery_courier").equals(logInfo.name()))
                     return false;
-            }else {
+            } else {
                 return false;
             }
 

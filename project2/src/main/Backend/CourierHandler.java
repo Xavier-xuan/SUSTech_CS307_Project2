@@ -58,20 +58,20 @@ public class CourierHandler {
     }
 
     /**
-     * @url /courier/set_state
+     * @url /courier/set_item_state
      * @Header username String
      * @Header password String
      * @Header role     String
      * @Method Post
      * @RequestParam state              String
-     * @RequestParam code               String
+     * @RequestParam name               String
      * @Response String
      * @ResponseExmaple true
      */
     public static String setItemState(Request request, Response response) {
         LogInfo logInfo = Util.getLogInfo(request);
         ItemState itemState = Util.stateTextToObject(request.queryParams("state"));
-        String itemCode = request.queryParams("code");
+        String itemCode = request.queryParams("name");
         return String.valueOf(getCourierInstance().setItemState(logInfo, itemCode, itemState));
     }
 

@@ -346,5 +346,22 @@ public class Util {
         System.out.println("All cleaned");
     }
 
+    public static double getImportTaxRate(Connection connection, String city, String itemClass) throws SQLException {
+        Statement statement = connection.createStatement();
+        ResultSet queryResult = statement.executeQuery("SELECT import_tax, price from item where type = '%s' and import_city = '%s' limit 1;".formatted(itemClass, city));
+        if (!queryResult.next()) return -1;
+        double price = queryResult.getDouble("price");
+        double tax = queryResult.getDouble("import_tax");
+        return tax / price;
+    }
+
+    public static double getExportTaxRate(Connection connection, String city, String itemClass) throws SQLException {
+        Statement statement = connection.createStatement();
+        ResultSet queryResult = statement.executeQuery("SELECT export_tax, price from item where type = '%s' and export_city = '%s' limit 1;".formatted(itemClass, city));
+        if (!queryResult.next()) return -1;
+        double price = queryResult.getDouble("price");
+        double tax = queryResult.getDouble("export_tax");
+        return tax / price;
+    }
 
 }

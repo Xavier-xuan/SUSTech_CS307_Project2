@@ -1,13 +1,14 @@
 package main.Backend;
 
 import main.DBManipulation;
+import main.Util;
 
 import static spark.Spark.*;
 
 
 public class BackendServer {
     public static void main(String[] args) {
-        DBManipulation dm = new DBManipulation("127.0.0.1/project2","postgres","123456");
+        DBManipulation dm = new DBManipulation("127.0.0.1/postgres","postgres","123456");
         dm.$importFromFile(dm.tablePath, dm.staffPath);
         port(22307);
         post("/login", AuthHandler::login);

@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class LocalJudge {
 
-    private static String database = "localhost:5432/project2";
+    private static String database = "localhost:5432/postgres";
 
     private static String root = "postgres";
 
@@ -247,7 +247,7 @@ public class LocalJudge {
      */
     @Test
     @Order(11)
-    @Timeout(value = 2000, unit = TimeUnit.MILLISECONDS)
+//    @Timeout(value = 2000, unit = TimeUnit.MILLISECONDS)
     public void newItem() {
         Set<Map.Entry<List<Object>, Boolean>> entries = courierUserTest.newItem.entrySet();
         Set<Map.Entry<List<Object>, Boolean>> treeSet = new TreeSet<>((o1, o2) -> {
@@ -258,6 +258,7 @@ public class LocalJudge {
         treeSet.addAll(entries);
         for (Map.Entry<List<Object>, Boolean> entry : treeSet) {
             List<Object> params = entry.getKey();
+            System.out.println(((ItemInfo)params.get(1)).name());
             assertEquals(entry.getValue(), manipulation.newItem((LogInfo) params.get(0), (ItemInfo) params.get(1)));
         }
 
