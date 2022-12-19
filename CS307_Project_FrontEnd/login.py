@@ -15,7 +15,7 @@ def login() :
         print()
         print("============================================================")
         print("|                       [Courier]                          |")
-        print("|      Please Enter Numer To Select Your Operation         |")
+        print("|      Please Enter Number To Select Your Operation        |")
         print("|----------------------------------------------------------|")
         print("|  1.Courier       2.Company Manager    3.Seaport Officer  |")
         print("|  4.SUSTCManager                       X.Exit             |")
@@ -32,7 +32,7 @@ def login() :
         elif op == '4':
             role = "sustc manager"
         else:
-            info = ("<Wrong Selection>")
+            info = "<Wrong Selection>"
             flag = True
     info = ""
     flag = True
@@ -60,9 +60,8 @@ def login() :
             print("              =============================              ")
             time.sleep(1)
         else:
-            info = ("Wrong Username or Password!")
+            info = "<Wrong Username or Password!>"
             flag = True
-    
     return username,passwd,role
 
 
