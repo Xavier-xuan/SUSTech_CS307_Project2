@@ -1,5 +1,4 @@
 import time
-import courier
 import util as u
 from getpass import getpass
 import requests
@@ -8,7 +7,7 @@ from urllib.parse import urljoin
 
 def login() :
     flag = True
-    info = ""
+    info = role = ""
     while flag:
         flag = False
         u.clear()
@@ -18,26 +17,27 @@ def login() :
         print("|      Please Enter Number To Select Your Operation        |")
         print("|----------------------------------------------------------|")
         print("|  1.Courier       2.Company Manager    3.Seaport Officer  |")
-        print("|  4.SUSTCManager                       X.Exit             |")
+        print("|  4.SUSTCManager                       Q.Exit             |")
         print("============================================================")
         print(info)
-        print(">>> ",end="")
-        op = input();
+        print(">>> ", end="")
+        op = input()
         if op == '1':
             role = "courier"
-        elif op =='2':
+        elif op == '2':
             role = "company manager"
         elif op == '3':
             role = "seaport officer"
         elif op == '4':
             role = "sustc manager"
+        elif op == 'X':
+            u.exit()
         else:
             info = "<Wrong Selection>"
             flag = True
     info = ""
     flag = True
     while flag==True:
-        flag = False
         u.clear()
         print("============================================================")
         print("|                        [Login]                           |")
@@ -47,7 +47,6 @@ def login() :
         print(">>> Username: ", end="")
         username = input()
         passwd = getpass(prompt=">>> Password: ")
-
         r = requests.post(urljoin(config['base'], '/login'), data = {
             "username": username,
             "role": role,
@@ -59,10 +58,6 @@ def login() :
             print("              |    Login Successfully!    |              ")
             print("              =============================              ")
             time.sleep(1)
+            return username, passwd, role
         else:
             info = "<Wrong Username or Password!>"
-            flag = True
-    return username,passwd,role
-
-
-
