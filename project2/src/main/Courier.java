@@ -21,7 +21,7 @@ public class Courier implements ICourier {
         try {
             // check illegal field
             if (itemInfo.name() == null || itemInfo.$class() == null || itemInfo.price() < 0 ||
-                    itemInfo.retrieval() == null || itemInfo.retrieval().courier() == logInfo.name() || itemInfo.retrieval().city() == null ||
+                    itemInfo.retrieval() == null || !itemInfo.retrieval().courier().equals( logInfo.name()) || itemInfo.retrieval().city() == null ||
                     itemInfo.delivery() == null || itemInfo.delivery().city() == null || itemInfo.export() == null || itemInfo.export().city() == null ||
                     itemInfo.export().tax() < 0 || itemInfo.$import().city() == null || itemInfo.$import().tax() < 0)
                 return false;

@@ -27,7 +27,6 @@ public class CourierHandler {
      * @RequestParam name               String
      * @RequestParam class              String
      * @RequestParam price              float
-     * @RequestParam state              String
      * @Response String
      * @ResponseExmaple true
      */
@@ -47,7 +46,7 @@ public class CourierHandler {
                 request.queryParams("name"),
                 request.queryParams("class"),
                 Double.parseDouble(request.queryParams("price")),
-                Util.stateTextToObject(request.queryParams("state")),
+                null,
                 retrievalInfo,
                 deliveryInfo,
                 importInfo,
