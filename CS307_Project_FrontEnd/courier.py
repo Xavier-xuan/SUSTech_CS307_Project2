@@ -32,7 +32,7 @@ def courier(username, passwd):
             itemType = iB("Item Type")
             price = iB("Item Price")
             fromCity = iB("From City")
-            retrievalC = iB("Retrieval Courier")
+            retrievalC = username
             toCity = iB("To City")
             deliveryC = iB("Delivery Courier")
             exportCity = iB("Export City")
@@ -41,8 +41,7 @@ def courier(username, passwd):
             importCity = iB("Import City")
             importOfficer = iB("Import Officer")
             importTax = iB("Import Tax")
-            state = iB("Item State")
-            result = new_item(username,passwd,item,itemType,price,state,fromCity,retrievalC,toCity,deliveryC,exportCity,exportOfficer,exportTax,importCity,importOfficer,importTax)
+            result = new_item(username,passwd,item,itemType,price,fromCity,retrievalC,toCity,deliveryC,exportCity,exportOfficer,exportTax,importCity,importOfficer,importTax)
             cR(result)
         elif op =='2':
             item = iB("Item Name")
@@ -57,7 +56,7 @@ def courier(username, passwd):
             info = ("<Wrong Selection>")
 
 def new_item(username,passwd,
-             item,itemType,price,state,
+             item,itemType,price,
              fromCity,retrievalC,
              toCity,deliveryC,
              exportCity,exportOfficer,exportTax,
@@ -66,7 +65,6 @@ def new_item(username,passwd,
         'name': item,
         'class':itemType,
         'price':price,
-        'state':state,
         'from_city':fromCity,
         'to_city':toCity,
         'retrieval_courier':retrievalC,
