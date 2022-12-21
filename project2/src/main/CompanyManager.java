@@ -12,7 +12,6 @@ public class CompanyManager implements ICompanyManager {
     PreparedStatement importTaxRateStatement;
     PreparedStatement exportTaxRateStatement;
     PreparedStatement loadItemStatement;
-    PreparedStatement loadContainerStatement;
     PreparedStatement loadContainerCheckItemStatement;
     PreparedStatement loadToShipStatement;
     PreparedStatement startSailingStatement;

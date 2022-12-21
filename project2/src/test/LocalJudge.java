@@ -258,7 +258,6 @@ public class LocalJudge {
         treeSet.addAll(entries);
         for (Map.Entry<List<Object>, Boolean> entry : treeSet) {
             List<Object> params = entry.getKey();
-            System.out.println(((ItemInfo)params.get(1)).name());
             assertEquals(entry.getValue(), manipulation.newItem((LogInfo) params.get(0), (ItemInfo) params.get(1)));
         }
 

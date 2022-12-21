@@ -5,7 +5,8 @@ import requests
 from config import config
 from urllib.parse import urljoin
 
-def login() :
+
+def login():
     flag = True
     info = role = ""
     while flag:
@@ -13,11 +14,11 @@ def login() :
         u.clear()
         print()
         print("============================================================")
-        print("|                       [Courier]                          |")
-        print("|      Please Enter Number To Select Your Operation        |")
+        print("|                         [Login]                          |")
+        print("|         Please Enter Number To Select Your Role          |")
         print("|----------------------------------------------------------|")
-        print("|  1.Courier       2.Company Manager    3.Seaport Officer  |")
-        print("|  4.SUSTCManager                       Q.Exit             |")
+        print("|  1. Courier      2. Company Manager   3. Seaport Officer |")
+        print("|  4. SUSTCManager                      Q. Exit            |")
         print("============================================================")
         print(info)
         print(">>> ", end="")
@@ -36,28 +37,29 @@ def login() :
             info = "<Wrong Selection>"
             flag = True
     info = ""
-    flag = True
-    while flag==True:
-        u.clear()
-        print("============================================================")
-        print("|                        [Login]                           |")
-        print("|        Please Enter Your Username and Password           |")
-        print("============================================================")
-        print(info)
-        print(">>> Username: ", end="")
-        username = input()
-        passwd = getpass(prompt=">>> Password: ")
-        r = requests.post(urljoin(config['base'], '/login'), data = {
-            "username": username,
-            "role": role,
-            "password": passwd
-        })
-        result = r.json()
-        if(result):
-            print("              =============================              ")
-            print("              |    Login Successfully!    |              ")
-            print("              =============================              ")
-            time.sleep(1)
-            return username, passwd, role
-        else:
-            info = "<Wrong Username or Password!>"
+    u.clear()
+    print("============================================================")
+    print("|                        [Login]                           |")
+    print("|        Please Enter Your Username and Password           |")
+    print("============================================================")
+    print(info)
+    print(">>> Username: ", end="")
+    username = input()
+    passwd = getpass(prompt=">>> Password: ")
+    r = requests.post(urljoin(config['base'], '/login'), data={
+        "username": username,
+        "role": role,
+        "password": passwd
+    })
+    result = r.json()
+    if (result):
+        print("              =============================              ")
+        print("              |    Login Successfully!    |              ")
+        print("              =============================              ")
+        time.sleep(1)
+        success = True
+    else:
+        print("<Wrong Username or Password!>")
+        time.sleep(1)
+        success = False
+    return username, passwd, role, success

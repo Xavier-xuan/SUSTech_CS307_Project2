@@ -1,3 +1,4 @@
+import json
 import time
 
 import util as u
@@ -7,15 +8,18 @@ from urllib.parse import urljoin
 from util import inputByType as iB
 from util import checkResult as cR
 
+global role
+role = "seaport officer"
+
 
 def officer(username, passwd):
-    role = "officer"
     info = ""
     flag = True
+
     while flag:
         u.clear()
         print()
-        print("Hello! %s" % username)
+        print("Hello! %s: %s" % (role, username))
         print("============================================================")
         print("|                       [Operations]                       |")
         print("|      Please Enter Number To Select Your Operation        |")
@@ -32,7 +36,7 @@ def officer(username, passwd):
             get_all_items_at_port(username, passwd)
         elif op == '2':
             item = iB("Item Name")
-            state = iB("Check State(true/false)")
+            state = iB("Check State (true/false)")
             result = set_item_check_state(username, passwd, item, state)
             cR(result)
         elif op == 'X':
@@ -47,10 +51,17 @@ def get_all_items_at_port(username, passwd):
     result = requests.get(urljoin(config['base'], '/officer/get_all_items_at_port'), headers={
         'username': username,
         'password': passwd,
-        'role': 'officer'
+        'role': role
     }).json()
-    print(result)
+
+    for i in range(len(result)):
+        if (i % 9 == 0) & (i > 0):
+            print(result[i])
+        else:
+            print(result[i].ljust(20), end="")
+    print("")
     input("Press Enter to continue...")
+
 
 def set_item_check_state(username, passwd, item, state):
     result = requests.post(urljoin(config['base'], '/officer/set_item_check_state'), data={
@@ -59,6 +70,6 @@ def set_item_check_state(username, passwd, item, state):
     }, headers={
         'username': username,
         'password': passwd,
-        'role': 'officer'
+        'role': role
     }).json()
     return result

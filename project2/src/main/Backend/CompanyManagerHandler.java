@@ -111,7 +111,6 @@ public class CompanyManagerHandler {
     public static String unloadItem(Request request, Response response) {
         LogInfo logInfo = Util.getLogInfo(request);
         String itemName = request.queryParams("item_name");
-
         return String.valueOf(getCompanyManagerInstance().unloadItem(logInfo, itemName));
     }
 
@@ -128,7 +127,6 @@ public class CompanyManagerHandler {
     public static String itemWaitForChecking(Request request, Response response) {
         LogInfo logInfo = Util.getLogInfo(request);
         String itemName = request.params("item_name");
-
         return String.valueOf(getCompanyManagerInstance().itemWaitForChecking(logInfo, itemName));
     }
 

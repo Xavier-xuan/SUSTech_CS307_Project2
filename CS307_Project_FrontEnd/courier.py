@@ -6,15 +6,16 @@ from config import config
 from urllib.parse import urljoin
 from util import inputByType as iB
 from util import checkResult as cR
-
+global role
+role = "courier"
 def courier(username, passwd):
-    role = "courier"
+
     info = ""
     flag = True
     while flag:
         u.clear()
         print()
-        print("Hello! %s" %username)
+        print("Hello! %s: %s" % (role, username))
         print("============================================================")
         print("|                       [Operations]                       |")
         print("|      Please Enter Number To Select Your Operation        |")
@@ -78,7 +79,7 @@ def new_item(username,passwd,
     }, headers={
         'username': username,
         'password': passwd,
-        'role': 'courier'
+        'role': role
     }).json()
     return result
 
@@ -89,6 +90,6 @@ def set_item_state(username,passwd,item,state):
     }, headers={
         'username': username,
         'password': passwd,
-        'role': 'courier'
+        'role': role
     }).json()
     return result
