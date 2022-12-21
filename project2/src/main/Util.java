@@ -310,7 +310,7 @@ public class Util {
     public static LogInfo getLogInfo(Request request) {
         String username = request.headers("username");
         String password = request.headers("password");
-        String roleText = request.headers("role").toString().trim();
+        String roleText = request.headers("role").toLowerCase().trim();
         LogInfo.StaffType role;
 
         if (roleText == null) {
