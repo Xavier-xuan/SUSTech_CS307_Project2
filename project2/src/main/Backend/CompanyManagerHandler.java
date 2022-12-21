@@ -19,8 +19,8 @@ public class CompanyManagerHandler {
      */
     public static String getImportTaxRate(Request request, Response response) {
         LogInfo logInfo = Util.getLogInfo(request);
-        String city = request.queryParams(":city");
-        String itemClass = request.queryParams(":item_class");
+        String city = request.params(":city");
+        String itemClass = request.params(":item_class");
 
         return String.valueOf(getCompanyManagerInstance().getImportTaxRate(logInfo, city, itemClass));
     }
@@ -36,8 +36,8 @@ public class CompanyManagerHandler {
      */
     public static String getExportTaxRate(Request request, Response response) {
         LogInfo logInfo = Util.getLogInfo(request);
-        String city = request.queryParams(":city");
-        String itemClass = request.queryParams(":item_class");
+        String city = request.params(":city");
+        String itemClass = request.params(":item_class");
 
         return String.valueOf(getCompanyManagerInstance().getExportTaxRate(logInfo, city, itemClass));
     }
@@ -127,7 +127,7 @@ public class CompanyManagerHandler {
      */
     public static String itemWaitForChecking(Request request, Response response) {
         LogInfo logInfo = Util.getLogInfo(request);
-        String itemName = request.queryParams("item_name");
+        String itemName = request.params("item_name");
 
         return String.valueOf(getCompanyManagerInstance().itemWaitForChecking(logInfo, itemName));
     }
