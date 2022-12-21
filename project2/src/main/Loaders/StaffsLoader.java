@@ -15,6 +15,8 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static main.Util.autoEncryptPassword;
+
 public class StaffsLoader {
     private static int threads = 4;
     private static int staffCnt;
@@ -160,7 +162,7 @@ public class StaffsLoader {
             String Gender = Info[4];
             String Age = Info[5];
             String Phone = Info[6];
-            String Passwd = Info[7];
+            String Passwd = autoEncryptPassword(Info[7]);
             if (!Type.equals("Company Manager")) continue;
             CM.setString(1,Name);
             CM.setString(2,Phone);
@@ -195,7 +197,8 @@ public class StaffsLoader {
             String Gender = Info[4];
             String Age = Info[5];
             String Phone = Info[6];
-            String Passwd = Info[7];
+            String Passwd = autoEncryptPassword(Info[7]);
+
             if (!Type.equals("Courier")) continue;
             Courier.setString(1,Name);
             Courier.setString(2,Phone);
@@ -232,7 +235,8 @@ public class StaffsLoader {
             String Gender = Info[4];
             String Age = Info[5];
             String Phone = Info[6];
-            String Passwd = Info[7];
+            String Passwd = autoEncryptPassword(Info[7]);
+
             if (!Type.equals("Seaport Officer")) continue;
             Officer.setString(1,Name);
             Officer.setString(2,Phone);
@@ -269,7 +273,8 @@ public class StaffsLoader {
             String Gender = Info[4];
             String Age = Info[5];
             String Phone = Info[6];
-            String Passwd = Info[7];
+            String Passwd = autoEncryptPassword(Info[7]);
+
             if (!Type.equals("SUSTC Department Manager")) continue;
             SustcManager.setString(1,Name);
             SustcManager.setString(2,Phone);
@@ -300,7 +305,8 @@ public class StaffsLoader {
             String Gender = Info[4];
             String Age = Info[5];
             String Phone = Info[6];
-            String Passwd = Info[7];
+            String Passwd = autoEncryptPassword(Info[7]);
+
             if (!Type.equals("Company Manager")) continue;
             CM.setString(1,Name);
             CM.setString(2,Phone);
@@ -332,7 +338,8 @@ public class StaffsLoader {
             String Gender = Info[4];
             String Age = Info[5];
             String Phone = Info[6];
-            String Passwd = Info[7];
+            String Passwd = autoEncryptPassword(Info[7]);
+
             if (!Type.equals("Courier")) continue;
             Courier.setString(1,Name);
             Courier.setString(2,Phone);
@@ -363,7 +370,8 @@ public class StaffsLoader {
             String Gender = Info[4];
             String Age = Info[5];
             String Phone = Info[6];
-            String Passwd = Info[7];
+            String Passwd = autoEncryptPassword(Info[7]);
+
             if (!Type.equals("Seaport Officer")) continue;
             Officer.setString(1,Name);
             Officer.setString(2,Phone);
@@ -394,7 +402,7 @@ public class StaffsLoader {
             String Gender = Info[4];
             String Age = Info[5];
             String Phone = Info[6];
-            String Passwd = Info[7];
+            String Passwd = autoEncryptPassword(Info[7]);
             if (!Type.equals("SUSTC Department Manager")) continue;
             SustcManager.setString(1,Name);
             SustcManager.setString(2,Phone);

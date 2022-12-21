@@ -52,6 +52,17 @@ public class ConnectionManager {
      */
     static Connection rootConnection, courierConnection, officerConnection, companyManagerConnection, sustcManagerConnection;
 
+    public static void closeAllConnection() {
+        try {
+            if (rootConnection!=null) rootConnection.close();
+            if (courierConnection!=null) courierConnection.close();
+            if (officerConnection!=null) officerConnection.close();
+            if (companyManagerConnection!=null) companyManagerConnection.close();
+            if (sustcManagerConnection!=null) sustcManagerConnection.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
     /*
     Getters
      */
@@ -133,4 +144,5 @@ public class ConnectionManager {
         }
         return sustcManagerConnection;
     }
+
 }
