@@ -21,10 +21,15 @@ public class Courier implements ICourier {
         try {
             // check illegal field
             if (itemInfo.name() == null || itemInfo.$class() == null || itemInfo.price() < 0 ||
-                    itemInfo.retrieval() == null || !itemInfo.retrieval().courier().equals( logInfo.name()) || itemInfo.retrieval().city() == null ||
+                    itemInfo.retrieval() == null || itemInfo.retrieval().city() == null ||
                     itemInfo.delivery() == null || itemInfo.delivery().city() == null || itemInfo.export() == null || itemInfo.export().city() == null ||
                     itemInfo.export().tax() < 0 || itemInfo.$import().city() == null || itemInfo.$import().tax() < 0)
                 return false;
+
+            // courier is current user
+            if (itemInfo.retrieval().courier() != null && !itemInfo.retrieval().courier().equals(logInfo.name())) {
+                return false;
+            }
 
             // state must be null
             if (itemInfo.state() != null) {
@@ -35,7 +40,7 @@ public class Courier implements ICourier {
             if (Util.itemExists(itemInfo.name(), getConnection())) return false;
 
             // check whether the export city is the same
-            if (itemInfo.export().city() == itemInfo.$import().city()) {
+            if (itemInfo.export().city().equals(itemInfo.$import().city()) || itemInfo.retrieval().city().equals(itemInfo.delivery().city())) {
                 return false;
             }
 
@@ -46,7 +51,6 @@ public class Courier implements ICourier {
             double actualImportTaxRate = itemInfo.$import().tax() / itemInfo.price();
             if (exportTaxRate != -1 && Math.abs(exportTaxRate - actualExportTaxRate) > 0.0001) return false;
             if (importTaxRate != -1 && Math.abs(importTaxRate - actualImportTaxRate) > 0.0001) return false;
-
 
 
             // check if the retrieval city is where the courier works
