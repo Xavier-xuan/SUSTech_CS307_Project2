@@ -77,7 +77,7 @@ def get_import_tax_rate(username, passwd, city, itemType):
         'password': passwd,
         'role': role
     })
-    if result != "" :
+    if result != -1 :
         print("City: {0}, Import Tax Rate:{1}".format(city,result))
     else:
         print("Failed!")
@@ -89,7 +89,7 @@ def get_export_tax_rate(username, passwd, city, itemType):
         'password': passwd,
         'role': role
     })
-    if result != "" :
+    if result != -1 :
         print("City: {0}, Export Tax Rate:{1}".format(city,result))
     else:
         print("Failed!")
