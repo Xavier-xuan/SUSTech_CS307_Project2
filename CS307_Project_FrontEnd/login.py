@@ -30,7 +30,7 @@ def login() :
             role = "seaport officer"
         elif op == '4':
             role = "sustc manager"
-        elif op == 'X':
+        elif op == 'Q':
             u.exiting()
         else:
             info = "<Wrong Selection>"
