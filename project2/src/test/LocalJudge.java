@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class LocalJudge {
 
-    private static String database = "localhost:5432/postgres";
+    private static String database = "localhost:5432/project2";
 
     private static String root = "postgres";
 

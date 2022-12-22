@@ -2,10 +2,10 @@
 
 
 ## Members & Workload
-| Name       | Student ID | Contribution                                                                                                                                      | Ratio |
-| ---------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| Xuanyu Liu | 12110408   | Database Design (Task 1) <br> SUSTC Manager Module (Task 2) <br> Courier Module (Task 3) <br> Backend Module (Advancded Task) <br> Report Writing | 50%   |
-| Zexin Feng | 12110104   | xxxxxxx<br> xxxxxxxxx                                                                                                                             | 50%   |
+|    Name    | Student ID |                         Contribution                         | Ratio |
+| :--------: | ---------- | :----------------------------------------------------------: | :---: |
+| Xuanyu Liu | 12110408   | Database Design (Task 1) <br> SUSTC Manager Module (Task 2) <br> Courier Module (Task 3) <br> Backend Module (Advancded Task) <br> Report Writing |  50%  |
+| Zexin Feng | 12110104   |                    xxxxxxx<br> xxxxxxxxx                     |  50%  |
 
 
 ## Database Design

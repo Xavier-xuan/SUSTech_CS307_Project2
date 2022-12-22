@@ -154,7 +154,6 @@ public class DBManipulation implements IDatabaseManipulation {
 }
 
 class BeforeEnd {//程序退出事件处理
-
     BeforeEnd() {
         //模拟处理时间
         Thread t = new Thread(() -> {
@@ -163,6 +162,7 @@ class BeforeEnd {//程序退出事件处理
                 System.out.println("Processing Last Tasks...");
                 Connection con = ConnectionManager.getRootConnection();
                 Util.dropTableAndUsers(con);
+                ConnectionManager.closeAllConnection();
                 System.out.println("end...");
             } catch (Exception e) {
                 e.printStackTrace();
