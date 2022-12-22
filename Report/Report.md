@@ -166,6 +166,13 @@ WHERE officer.name = ?
 Because we store staffs with different roles in different tables, so we have to query the four tables one by one, the use `union` to gather the query result.
 
 ### Courier
+#### [Pre Operaton] Identity Check
+This is the pre operation of all the following methods. If identity check fails, all the successive procedures won't execute but return the value defined in project document immediately.
+```sql
+SELECT * FROM courier WHERE  name = ? AND password = ?
+```
+Query the user with corresponding username and password. If the result is not null, then login successfully.
+
 #### boolean newItem(LogInfo logInfo, ItemInfo itemInfo);
 **Firstly**, we execute basic data validation:
 
@@ -300,7 +307,7 @@ The backend program locates in `src/main/Backend` directory. The program structu
 #### API Provided
 All the available APIs are declared in `BackendServer.java` as follows.
 
-We map all the api listed in `Basic API Implementation` part. Besides, we provide an extra `/login` api out of convenience.
+We all the APIs listed in `Basic API Implementation` part are mapped here. Besides, we provide an extra `/login` api out of convenience.
 ```java
         post("/login", AuthHandler::login);
         get("/sustc_manager/company_count", SustcManagerHandler::getCompanyCount);
@@ -326,4 +333,42 @@ We map all the api listed in `Basic API Implementation` part. Besides, we provid
         post("/company_manager/ship_start_sailing", CompanyManagerHandler::shipStartSailing);
         post("/company_manager/unload_item", CompanyManagerHandler::unloadItem);
         post("/company_manager/item_wait_for_checking", CompanyManagerHandler::itemWaitForChecking);
+```
+
+#### Authentication
+All APIs except `/login` no matter using GET or POST method are required to contain credentials in request header:
+```json
+{
+    "username": "xxxxx",
+    "password": "xxxxx",
+    "role":     "xxxxx"
+}
+```
+
+#### Detailed Information
+Please turn to API's corresponding `handler` to get detailed information. For every API provided, we have showed the format of its requests and example of response at the comments. For example, you can get the detailed information of `/courier/new_item` at `CourierHandler`:
+```java
+    /**
+     * @url /courier/new_item
+     * @Header username String
+     * @Header password String
+     * @Header role     String
+     * @Method Post
+     * @RequestParam from_city          String
+     * @RequestParam to_city            String
+     * @RequestParam retrieval_courier  String
+     * @RequestParam delivery_courier   String
+     * @RequestParam export_city        String
+     * @RequestParam export_officer     String
+     * @RequestParam export_tax         float
+     * @RequestParam import_city        String
+     * @RequestParam import_officer     String
+     * @RequestParam import_tax         float
+     * @RequestParam name               String
+     * @RequestParam class              String
+     * @RequestParam price              float
+     * @Response String
+     * @ResponseExmaple true
+     */
+    public static String newItem(Request request, Response response);
 ```
