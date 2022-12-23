@@ -157,7 +157,7 @@ public class SustcManagerHandler {
      * @Method Get
      * @Response JSON
      * @ResponseExmaple {
-     * LogInfo: {
+     * basicInfo: {
      * username: "xxxxx",
      * password: "xxxxx",
      * },

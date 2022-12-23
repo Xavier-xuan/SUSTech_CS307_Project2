@@ -14,7 +14,7 @@ while True:
             companyManager(username, passwd)
         elif role == "seaport officer":
             officer(username, passwd)
-        elif role == "sustc officer":
+        elif role == "sustc manager":
             sustcManager(username, passwd)
     else:
         continue
