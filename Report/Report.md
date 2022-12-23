@@ -2,10 +2,10 @@
 
 
 ## Members & Workload
-|    Name    | Student ID |                         Contribution                         | Ratio |
-| :--------: | ---------- | :----------------------------------------------------------: | :---: |
-| Xuanyu Liu | 12110408   | Database Design (Task 1) <br> SUSTC Manager Module (Task 2) <br> Courier Module (Task 3) <br> Backend Module (Advancded Task) <br> Report Writing |  50%  |
-| Zexin Feng | 12110104   |                    xxxxxxx<br> xxxxxxxxx                     |  50%  |
+|         Name         |     Student ID     |                         Contribution                         |     Ratio     |
+| :------------------: | :----------------: | :----------------------------------------------------------: | :-----------: |
+|  <br><br>Xuanyu Liu  | <br/><br/>12110408 | Database Design (Task 1) <br> SUSTC Manager Module (Task 2) <br> Courier Module (Task 3) <br> Backend Module (Advanced Task) <br> Report Writing | <br/><br/>50% |
+| <br/><br/>Zexin Feng | <br/><br/>12110104 | Table Manipulation Module (Task 2)<br>Company Manager Module (Task 2)<br>Seaport Officer Module (Task 2)<br> Client Module (Advanced Task)<br>Report Writing | <br/><br/>50% |
 
 
 ## Database Design
@@ -26,7 +26,7 @@ CREATE USER officer WITH PASSWORD 'officer_password';
 CREATE USER company_manager WITH PASSWORD 'company_manager_password';
 CREATE USER sustc_manager WITH PASSWORD 'sustc_manager_password';
 ```
-We create four database users naming `courier``officer``company_manager``sustc_manager` which correspond to four entities of SUSTC.
+We create four database users naming `courier` `officer` `company_manager` `sustc_manager` which correspond to four entities of SUSTC.
 
 ### Permission Granting
 SQL:
@@ -42,11 +42,66 @@ Because while executing `newItem()` method, there may be some new cities, ships 
 
 No special description for other users.  
 
-
 ## Basic API Implementation
+
+### Table Manipulation
+
+#### Constructor(String database, String root, String pass);
+
+The constructor first connect to the database with use opened source script runner to run the SQL files to create the table for items and employees.  Then add a listener to listen the shut down event then drop all the table and users
+
+**sql example:**
+
+```sql
+CREATE TABLE IF NOT EXISTS item
+(
+    name              varchar(50) primary key,
+    price             numeric(20, 10),
+    type              varchar(50),
+    export_tax        numeric(20, 10),
+    import_tax        numeric(20, 10),
+    export_city       varchar(50) references port_city,
+    import_city       varchar(50) references port_city,
+    export_officer    varchar(50) references officer (name),
+    import_officer    varchar(50) references officer (name),
+    from_city_name    varchar(50) references city (name),
+    to_city_name      varchar(50) references city (name),
+    delivery_courier  varchar(50) references courier (name),
+    retrieval_courier varchar(50) references courier (name),
+    container_code    varchar(50) references container (code),
+    ship_name         varchar(50) references ship (name),
+    state             varchar(50)
+);
+```
+
+**shut down listener**
+
+```java
+class BeforeEnd {
+    BeforeEnd() {
+        Thread t = new Thread(() -> {
+            try {
+                System.out.println("Processing Last Tasks...");
+                Connection con = ConnectionManager.getRootConnection();
+                Util.dropTableAndUsers(con);
+                ConnectionManager.closeAllConnection();
+                System.out.println("end...");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        Runtime.getRuntime().addShutdownHook(t);
+    }
+}
+```
+
+#### void import(String recordsCSV, String staffsCSV);
+
+The multiple threads loader we are using is what we designed in Project 1. Script runner and loaders are all in the path `src/main/Loaders/`. We wrote a report about our loader in Project 1 already. We disabled all the trigger and load into each table with a new thread to avoid dead lock.
+
 ### SUSTC Department Manager User
 
-#### [Pre Operaton] Identity Check
+#### [Pre Operation] Identity Check
 This is the pre operation of all the following methods. If identity check fails, all the successive procedures won't execute but return the value defined in project document immediately.
 ```sql
 SELECT * FROM sustc_manager WHERE  name = ? AND password = ?
@@ -261,13 +316,152 @@ If the item need to update its delivery courier, we perform following SQL:
 UPDATE item SET delivery_courier = ? WHERE  item.name = ?;
 ```
 
+### Company Manager User
 
+#### double getImportTaxRate(LogInfo log, String city, String itemClass);
 
+We use sql to select specific type of item in import city and return the value tax/price.
 
+```sql
+SELECT import_tax, price from item where type = ? and import_city = ? limit 1
+```
 
+#### double getExportTaxRate(LogInfo log, String city, String itemClass)
 
+same as above
 
+#### bool loadItemToContainer(LogInfo log, String itemName, String containerCode);
 
+First we check the permission of this manager, first we use sql check if the item exist or not, then we get the company of manager, and get the company of item from the retrieval courier of item. Then check the usage of container and if the item state correct or not.
+
+```sql
+//check existing & get item state
+SELECT * from item where name = ?
+//check company
+SELECT * from courier where name = ?	//name from fisrt sql
+SELECT * from company_manager where name = ?
+//check container
+SELECT * FROM item WHERE container_code = ? and ( state = ? or state = ? or state = ?)		//state between packing and unpacking
+```
+
+If the operation is valid. we update item's container code
+
+```sql
+UPDATE item SET container_code = ? WHERE name = ?
+```
+
+#### bool loadContainerToShip(LogInfo log, String shipName, String containerCode);
+
+We check if the ship is ready or not by select the item which is shipping with corresponding ship. Then check if the container is ready for load or not (valid state and didn't load to any ship). After all check if the manager have the permission just like we did above.
+
+```sql
+//check ship
+SELECT * FROM item WHERE ship_name = ? and ( state = ? )
+//check if item exist and ready
+SELECT * FROM item WHERE container_code = ? and state = ? and (ship_name = '' or ship_name is null)
+//check permission
+SELECT * from courier where name = ?	//name from fisrt sql
+SELECT * from company_manager where name = ?
+SELECT * from ship where name = ?
+```
+
+If the operation is valid. we update item's ship name and state
+
+```sql
+UPDATE item SET ship_name = ?, state = ?  WHERE name = ?
+```
+
+#### bool shipStartSailing(LogInfo log, String shipName);
+
+We check if the ship is sailing by select the item which has the ship name and state is shipping. If it is exist, then ship is using. Then check is permission of manager by the same way above.
+
+```sql
+SELECT * FROM item WHERE ship_name = ? and ( state = ? )
+```
+
+Then, we make a list which contains the item on this ship, and update their state to shipping.
+
+```sql
+SELECT * FROM item WHERE state = ? and ship_name = ?
+//for all item above
+UPDATE item SET state = ? where name = ?
+```
+
+#### bool unloadItem(LogInfo log, String item);
+
+First check is existing of item, then the permission of manager, finally the state of item
+
+```sql
+SELECT * FROM item WHERE name = ? and state = ?
+```
+
+Then update the item state
+
+```sql
+UPDATE item SET state = ? WHERE name = ?
+```
+
+#### bool itemWaitForChecking(LogInfo log, String item);
+
+First check is existing of item, then the permission of manager, finally the state of item
+
+```sql
+SELECT * FROM item WHERE name = ? and state = ?
+```
+
+Then update the item state
+
+```sql
+UPDATE item SET state = ? WHERE name = ?
+```
+
+### Seaport Officer User
+
+#### String[] getAllItemsAtPort(LogInfo log);
+
+First we check the city of current officer
+
+```sql
+SELECT * FROM officer WHERE name = ?
+```
+
+Then we select all the item which is wait for export/import checking in this ciry
+
+```sql
+SELECT name FROM item WHERE (export_city = ? and state = ?) or (import_city = ? and state = ?)
+```
+
+And return it as an array.
+
+#### bool setItemCheckState(LogInfo log, String itemName, bool success);
+
+First we check is existing of item and the item state. Set item state to different state by export/import checking
+
+```java
+switch (state) {
+    default -> {
+        return false;
+    }
+    case 3 -> {
+        if(!Util.getOfficerCity(logInfo.name()).equals(Util.getItemExportCity(itemName))) return false;
+        if (success) {
+            Util.setItemState(itemName, 4, getConnection());
+        } else {
+            Util.setItemState(itemName, 12, getConnection());
+        }
+        Util.setItemExportOfficer(itemName, logInfo.name());
+    }
+    case 8 -> {
+		if(!Util.getOfficerCity(logInfo.name()).equals(Util.getItemImportCity(itemName))) return false;
+        if (success) {
+            Util.setItemState(itemName, 9, getConnection());
+        } else {
+            Util.setItemState(itemName, 13, getConnection());
+        }
+        Util.setItemImportOfficer(itemName, logInfo.name());
+    }
+}
+```
 
 ## Adcanced Task
 

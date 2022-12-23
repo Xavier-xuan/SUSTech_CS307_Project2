@@ -24,7 +24,6 @@ public class SeaportOfficer implements ISeaportOfficer {
             ResultSet officer = getPortStatement.executeQuery();
             officer.next();
             String city = officer.getString("port_city_name");
-
             allItemStatement.setString(1, city);
             allItemStatement.setString(2, Util.intToState(3));
             allItemStatement.setString(3, city);

@@ -67,7 +67,7 @@ def company_count(username, passwd):
         'username': username,
         'password': passwd,
         'role': role
-    })
+    }).json()
     if result != -1:
         print("Company Count: {0}".format(result))
     else:
@@ -78,7 +78,7 @@ def city_count(username, passwd):
         'username': username,
         'password': passwd,
         'role': role
-    })
+    }).json()
     if result != -1:
         print("City Count: {0}".format(result))
     else:
