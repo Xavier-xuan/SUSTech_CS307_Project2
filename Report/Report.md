@@ -566,3 +566,93 @@ Please turn to API's corresponding `handler` to get detailed information. For ev
      */
     public static String newItem(Request request, Response response);
 ```
+
+### Client
+
+ui:
+
+login
+
+```python
+print("============================================================")
+print("|                         [Login]                          |")
+print("|         Please Enter Number To Select Your Role          |")
+print("|----------------------------------------------------------|")
+print("|  1. Courier      2. Company Manager   3. Seaport Officer |")
+print("|  4. SUSTCManager                      Q. Exit            |")
+print("============================================================")
+```
+
+Then input username and password:
+
+```python
+	print("============================================================")
+    print("|                        [Login]                           |")
+    print("|        Please Enter Your Username and Password           |")
+    print("============================================================")
+    print(info)
+    print(">>> Username: ", end="")
+    username = input()
+    passwd = getpass(prompt=">>> Password: ")
+    r = requests.post(urljoin(config['base'], '/login'), data={
+        "username": username,
+        "role": role,
+        "password": passwd
+    })
+    result = r.json()
+    if (result):
+        print("              =============================              ")
+        print("              |    Login Successfully!    |              ")
+        print("              =============================              ")
+        time.sleep(1)
+        success = True
+    else:
+        print("<Wrong Username or Password!>")
+        time.sleep(1)
+        success = False
+    
+    return username, passwd, role, success
+```
+
+Next is operations
+
+For example sustc manager:
+
+```python
+print("============================================================")
+print("|                       [Operations]                       |")
+print("|      Please Enter Number To Select Your Operation        |")
+print("|----------------------------------------------------------|")
+print("|                   1. Get Company Count                   |")
+print("|                     2. Get City Count                    |")
+print("|                   3. Get Courier Count                   |")
+print("|                     4. Get Ship Count                    |")
+print("|                     5. Get Item Info                     |")
+print("|                     6. Get Ship Info                     |")
+print("|                   7. Get Container Info                  |")
+print("|                     8. Get Staff Info                    |")
+print("|----------------------------------------------------------|")
+print("|          X. Log Out                     Q. Quit          |")
+print("============================================================")
+```
+
+We then use `requests` module to send http request to back end
+
+for example (get city count):
+
+```python
+def company_count(username, passwd):
+    result = requests.get(urljoin(config['base'], '/sustc_manager/company_count'), headers={
+        'username': username,
+        'password': passwd,
+        'role': role
+    }).json()
+    if result != -1:
+        print("Company Count: {0}".format(result))
+    else:
+        print("Failed!")
+    input("Press Enter to continue...")
+
+```
+
+That's all, thanks
