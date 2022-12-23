@@ -1,0 +1,17 @@
+<component name="libraryTable">
+  <library name="lib">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/gson-2.10.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/spark-core-2.9.4-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/spark-core-2.9.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/slf4j-simple-2.0.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/slf4j-api-2.0.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/postgresql-42.2.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/cs307.project2.interfaces.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/javax.servlet-api-4.0.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/guava-31.1-jre.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
