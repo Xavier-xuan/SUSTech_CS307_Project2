@@ -1,4 +1,3 @@
-
 import util as u
 import requests
 from config import config
@@ -8,6 +7,8 @@ from util import checkResult as cR
 
 global role
 role = "company manager"
+
+
 def companyManager(username, passwd):
     info = ""
     flag = True
@@ -72,31 +73,35 @@ def companyManager(username, passwd):
 
 
 def get_import_tax_rate(username, passwd, city, itemType):
-    result = requests.get(urljoin(config['base'], '/company_manager/get_import_tax_rate/{0}/{1}'.format(city, itemType)), headers={
-        'username': username,
-        'password': passwd,
-        'role': role
-    })
-    if result != -1 :
-        print("City: {0}, Import Tax Rate:{1}".format(city,result))
+    result = requests.get(
+        urljoin(config['base'], '/company_manager/get_import_tax_rate/{0}/{1}'.format(city, itemType)), headers={
+            'username': username,
+            'password': passwd,
+            'role': role
+        })
+    if result != -1:
+        print("City: {0}, Import Tax Rate:{1}".format(city, result))
     else:
         print("Failed!")
     input("Press Enter to continue...")
+
 
 def get_export_tax_rate(username, passwd, city, itemType):
-    result = requests.get(urljoin(config['base'], '/company_manager/get_export_tax_rate/{0}/{1}'.format(city, itemType)), headers={
-        'username': username,
-        'password': passwd,
-        'role': role
-    })
-    if result != -1 :
-        print("City: {0}, Export Tax Rate:{1}".format(city,result))
+    result = requests.get(
+        urljoin(config['base'], '/company_manager/get_export_tax_rate/{0}/{1}'.format(city, itemType)), headers={
+            'username': username,
+            'password': passwd,
+            'role': role
+        })
+    if result != -1:
+        print("City: {0}, Export Tax Rate:{1}".format(city, result))
     else:
         print("Failed!")
     input("Press Enter to continue...")
 
-def load_item_to_container(username,passwd,itemName,containerCode):
-    result = requests.post(urljoin(config['base'], '/company_manager/load_item_to_container'), data ={
+
+def load_item_to_container(username, passwd, itemName, containerCode):
+    result = requests.post(urljoin(config['base'], '/company_manager/load_item_to_container'), data={
         'item_name': itemName,
         'container_code': containerCode
     }, headers={
@@ -106,8 +111,9 @@ def load_item_to_container(username,passwd,itemName,containerCode):
     }).json()
     return result
 
-def load_container_to_ship(username,passwd,shipName,containerCode):
-    result = requests.post(urljoin(config['base'], '/company_manager/load_container_to_ship'), data ={
+
+def load_container_to_ship(username, passwd, shipName, containerCode):
+    result = requests.post(urljoin(config['base'], '/company_manager/load_container_to_ship'), data={
         'ship_name': shipName,
         'container_code': containerCode
     }, headers={
@@ -118,8 +124,8 @@ def load_container_to_ship(username,passwd,shipName,containerCode):
     return result
 
 
-def ship_start_sailing(username,passwd,shipName):
-    result = requests.post(urljoin(config['base'], '/company_manager/ship_start_sailing'), data ={
+def ship_start_sailing(username, passwd, shipName):
+    result = requests.post(urljoin(config['base'], '/company_manager/ship_start_sailing'), data={
         'ship_name': shipName,
     }, headers={
         'username': username,
@@ -128,8 +134,9 @@ def ship_start_sailing(username,passwd,shipName):
     }).json()
     return result
 
-def unload_item(username,passwd,item):
-    result = requests.post(urljoin(config['base'], '/company_manager/unload_item'), data ={
+
+def unload_item(username, passwd, item):
+    result = requests.post(urljoin(config['base'], '/company_manager/unload_item'), data={
         'item_name': item,
     }, headers={
         'username': username,
@@ -138,8 +145,9 @@ def unload_item(username,passwd,item):
     }).json()
     return result
 
-def item_wait_for_checking(username,passwd,item):
-    result = requests.post(urljoin(config['base'], '/company_manager/item_wait_for_checking'), data ={
+
+def item_wait_for_checking(username, passwd, item):
+    result = requests.post(urljoin(config['base'], '/company_manager/item_wait_for_checking'), data={
         'item_name': item,
     }, headers={
         'username': username,

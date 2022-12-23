@@ -30,9 +30,7 @@ public class DBManipulation implements IDatabaseManipulation {
             Reader tables = new FileReader("sql/createTable.sql");
             Reader users = new FileReader("sql/createUser.sql");
             scriptRunner.runScript(tables);
-//            scriptRunner.setDelimiter(";;;;", false);
             scriptRunner.runScript(users);
-
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -153,12 +151,10 @@ public class DBManipulation implements IDatabaseManipulation {
     }
 }
 
-class BeforeEnd {//程序退出事件处理
+class BeforeEnd {
     BeforeEnd() {
-        //模拟处理时间
         Thread t = new Thread(() -> {
             try {
-                //模拟正常终止前任务
                 System.out.println("Processing Last Tasks...");
                 Connection con = ConnectionManager.getRootConnection();
                 Util.dropTableAndUsers(con);

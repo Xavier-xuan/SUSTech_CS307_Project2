@@ -148,11 +148,13 @@ public class Util {
 
     public static boolean containerIsUsing(String name) throws SQLException {
         Connection connection = ConnectionManager.getDMConnection();
-        PreparedStatement pres = connection.prepareStatement("SELECT * FROM item WHERE container_code = ? and ( state = ? or state = ? or state = ?)");
+        PreparedStatement pres = connection.prepareStatement("SELECT * FROM item WHERE container_code = ? and (state = ? or state = ? or state = ? or state = ?)");
         pres.setString(1, name);
         pres.setString(2, Util.intToState(5));
         pres.setString(3, Util.intToState(6));
         pres.setString(4, Util.intToState(7));
+        pres.setString(5, Util.intToState(4));
+
         ResultSet resultSet = pres.executeQuery();
         return resultSet.next();
     }
