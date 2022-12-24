@@ -1,12 +1,9 @@
-
 import util as u
 import requests
 from config import config
 from urllib.parse import urljoin
 from util import inputByType as iB
-from util import checkResult as cR
 
-global role
 role = "sustc manager"
 
 
@@ -117,7 +114,7 @@ def ship_count(username, passwd):
 
 
 def item_info(username, passwd, itemName):
-    result = requests.get(urljoin(config['base'], '/sustc_manager/item_info/{}'.format(itemName)),  headers={
+    result = requests.get(urljoin(config['base'], '/sustc_manager/item_info/{}'.format(itemName)), headers={
         'username': username,
         'password': passwd,
         'role': role
@@ -137,29 +134,30 @@ def item_info(username, passwd, itemName):
               "Import City:\t{12}\n"
               "Import Officer:\t{13}\n"
               "Import Tax:\t{14}\n".format(
-                  None,
-                  result['name'],
-                  result['$class'],
-                  result['price'],
-                  result['state'],
-                  result['retrieval']['city'],
-                  result['retrieval']['courier'],
-                  result['delivery']['city'],
-                  result['delivery']['courier'],
-                  result['export']['city'],
-                  result['export']['officer'],
-                  result['export']['tax'],
-                  result['$import']['city'],
-                  result['$import']['officer'],
-                  result['$import']['tax']
-              ))
+                None,
+                result['name'],
+                result['$class'],
+                result['price'],
+                result['state'],
+                result['retrieval']['city'],
+                result['retrieval']['courier'],
+                result['delivery']['city'],
+                result['delivery']['courier'],
+                result['export']['city'],
+                result['export']['officer'],
+                result['export']['tax'],
+                result['$import']['city'],
+                result['$import']['officer'],
+                result['$import']['tax']
+              )
+              )
     else:
         print("Failed!")
     input("Press Enter to continue...")
 
 
 def ship_info(username, passwd, shipName):
-    result = requests.get(urljoin(config['base'], '/sustc_manager/ship_info/{}'.format(shipName)),  headers={
+    result = requests.get(urljoin(config['base'], '/sustc_manager/ship_info/{}'.format(shipName)), headers={
         'username': username,
         'password': passwd,
         'role': role
@@ -168,31 +166,31 @@ def ship_info(username, passwd, shipName):
         print("Name:\t{0}\n"
               "Owner:\t{1}\n"
               "Sailing:\t{2}\n".format(
-                  result['name'],
-                  result['owner'],
-                  result['sailing']))
+                result['name'],
+                result['owner'],
+                result['sailing']))
     else:
         print("Failed!")
     input("Press Enter to continue...")
 
 
 def container_info(username, passwd, containerCode):
-    result = requests.get(urljoin(config['base'], '/sustc_manager/container_info/{}'.format(containerCode)),  headers={
+    result = requests.get(urljoin(config['base'], '/sustc_manager/container_info/{}'.format(containerCode)), headers={
         'username': username,
         'password': passwd,
         'role': role
     }).json()
     if result is not None:
         print("Code:\t{0}\n"
-        "Type:\t{1}\n"
-        "Using:\t{2}\n".format(result['code'], result['type'], result['using']))
+              "Type:\t{1}\n"
+              "Using:\t{2}\n".format(result['code'], result['type'], result['using']))
     else:
         print("Failed!")
     input("Press Enter to continue...")
 
 
 def staff_info(username, passwd, staffName):
-    result = requests.get(urljoin(config['base'], '/sustc_manager/staff_info/{}'.format(staffName)),  headers={
+    result = requests.get(urljoin(config['base'], '/sustc_manager/staff_info/{}'.format(staffName)), headers={
         'username': username,
         'password': passwd,
         'role': role
@@ -200,18 +198,17 @@ def staff_info(username, passwd, staffName):
     if result is not None:
         print(result)
         print("Username:\t{}\n"
-        "Role:\t{}\n"
-        "City:\t{}\n"
-        "Is Female:\t{}\n"
-        "Age:\t{}\n"
-        "Phone Number:\t{}\n".format(
-            result['basicInfo']['name'], 
-            result['basicInfo']['type'], 
-            result['city'], 
-            result['isFemale'], 
-            result['age'], 
-            result['phoneNumber']))
+              "Role:\t{}\n"
+              "City:\t{}\n"
+              "Is Female:\t{}\n"
+              "Age:\t{}\n"
+              "Phone Number:\t{}\n".format(
+                result['basicInfo']['name'],
+                result['basicInfo']['type'],
+                result['city'],
+                result['isFemale'],
+                result['age'],
+                result['phoneNumber']))
     else:
         print("Failed!")
     input("Press Enter to continue...")
-

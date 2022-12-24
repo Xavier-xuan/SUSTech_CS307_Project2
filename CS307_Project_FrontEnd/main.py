@@ -6,8 +6,8 @@ from sustcManager import sustcManager
 global username, passwd, role
 
 while True:
-    username, passwd, role, success= login()
-    if (success):
+    username, passwd, role, success = login()
+    if success:
         if role == "courier":
             courier(username, passwd)
         elif role == "company manager":

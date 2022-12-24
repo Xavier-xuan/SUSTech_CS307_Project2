@@ -5,7 +5,6 @@ from urllib.parse import urljoin
 from util import inputByType as iB
 from util import checkResult as cR
 
-global role
 role = "company manager"
 
 

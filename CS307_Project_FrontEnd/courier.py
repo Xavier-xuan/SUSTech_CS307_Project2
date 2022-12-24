@@ -1,15 +1,14 @@
-import sys
-import time
 import util as u
 import requests
 from config import config
 from urllib.parse import urljoin
 from util import inputByType as iB
 from util import checkResult as cR
-global role
-role = "courier"
-def courier(username, passwd):
 
+role = "courier"
+
+
+def courier(username, passwd):
     info = ""
     flag = True
     while flag:
@@ -42,37 +41,39 @@ def courier(username, passwd):
             importCity = iB("Import City")
             importOfficer = iB("Import Officer")
             importTax = iB("Import Tax")
-            result = new_item(username,passwd,item,itemType,price,fromCity,retrievalC,toCity,deliveryC,exportCity,exportOfficer,exportTax,importCity,importOfficer,importTax)
+            result = new_item(username, passwd, item, itemType, price, fromCity, retrievalC, toCity, deliveryC,
+                              exportCity, exportOfficer, exportTax, importCity, importOfficer, importTax)
             cR(result)
-        elif op =='2':
+        elif op == '2':
             item = iB("Item Name")
             state = iB("Item State")
-            result = set_item_state(username,passwd,item,state)
+            result = set_item_state(username, passwd, item, state)
             cR(result)
         elif op == 'X':
             flag = False
         elif op == 'Q':
             u.exiting()
         else:
-            info = ("<Wrong Selection>")
+            info = "<Wrong Selection>"
 
-def new_item(username,passwd,
-             item,itemType,price,
-             fromCity,retrievalC,
-             toCity,deliveryC,
-             exportCity,exportOfficer,exportTax,
-             importCity,importOfficer,importTax):
-    result = requests.post(urljoin(config['base'], '/courier/new_item'), data = {
+
+def new_item(username, passwd,
+             item, itemType, price,
+             fromCity, retrievalC,
+             toCity, deliveryC,
+             exportCity, exportOfficer, exportTax,
+             importCity, importOfficer, importTax):
+    result = requests.post(urljoin(config['base'], '/courier/new_item'), data={
         'name': item,
-        'class':itemType,
-        'price':price,
-        'from_city':fromCity,
-        'to_city':toCity,
-        'retrieval_courier':retrievalC,
-        'delivery_courier':deliveryC,
-        'export_city':exportCity,
-        'export_officer':exportOfficer,
-        'export_tax':exportTax,
+        'class': itemType,
+        'price': price,
+        'from_city': fromCity,
+        'to_city': toCity,
+        'retrieval_courier': retrievalC,
+        'delivery_courier': deliveryC,
+        'export_city': exportCity,
+        'export_officer': exportOfficer,
+        'export_tax': exportTax,
         'import_city': importCity,
         'import_officer': importOfficer,
         'import_tax': importTax
@@ -83,8 +84,9 @@ def new_item(username,passwd,
     }).json()
     return result
 
-def set_item_state(username,passwd,item,state):
-    result = requests.post(urljoin(config['base'], '/courier/set_item_state'), data ={
+
+def set_item_state(username, passwd, item, state):
+    result = requests.post(urljoin(config['base'], '/courier/set_item_state'), data={
         'state': state,
         'name': item
     }, headers={
