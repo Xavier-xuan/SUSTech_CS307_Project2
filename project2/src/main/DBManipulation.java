@@ -4,6 +4,7 @@ import main.Loaders.*;
 import main.interfaces.*;
 
 import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.sql.Connection;
 
@@ -27,8 +28,8 @@ public class DBManipulation implements IDatabaseManipulation {
             new BeforeEnd();
             con.setAutoCommit(false);
             ScriptRunner scriptRunner = new ScriptRunner(con, false, true);
-            Reader tables = new FileReader("sql/createTable.sql");
-            Reader users = new FileReader("sql/createUser.sql");
+            Reader tables = new InputStreamReader(DBManipulation.class.getResourceAsStream("sql/createTable.sql"));
+            Reader users = new InputStreamReader(DBManipulation.class.getResourceAsStream("sql/createUser.sql"));
             scriptRunner.runScript(tables);
             scriptRunner.runScript(users);
         } catch (Exception e) {
