@@ -1,6 +1,3 @@
-import json
-import time
-
 import util as u
 import requests
 from config import config
@@ -8,7 +5,6 @@ from urllib.parse import urljoin
 from util import inputByType as iB
 from util import checkResult as cR
 
-global role
 role = "seaport officer"
 
 
@@ -44,7 +40,7 @@ def officer(username, passwd):
         elif op == 'Q':
             u.exiting()
         else:
-            info = ("<Wrong Selection>")
+            info = "<Wrong Selection>"
 
 
 def get_all_items_at_port(username, passwd):

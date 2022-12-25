@@ -52,7 +52,7 @@ def login():
         "password": passwd
     })
     result = r.json()
-    if (result):
+    if result:
         print("              =============================              ")
         print("              |    Login Successfully!    |              ")
         print("              =============================              ")
