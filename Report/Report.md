@@ -4,12 +4,12 @@
 ## Members & Workload
 |         Name         |     Student ID     |                         Contribution                         |     Ratio     |
 | :------------------: | :----------------: | :----------------------------------------------------------: | :-----------: |
-|  <br><br>Xuanyu Liu  | <br/><br/>12110408 | Database Design (Task 1) <br> SUSTC Manager Module (Task 2) <br> Courier Module (Task 3) <br> Backend Module (Advanced Task) <br> Report Writing | <br/><br/>50% |
+|  <br><br>Xuanyu Liu  | <br/><br/>12110408 | Database Design (Task 1) <br> SUSTC Manager Module (Task 2) <br> Courier Module (Task 2) <br> Backend Module (Advanced Task) <br> Report Writing | <br/><br/>50% |
 | <br/><br/>Zexin Feng | <br/><br/>12110104 | Table Manipulation Module (Task 2)<br>Company Manager Module (Task 2)<br>Seaport Officer Module (Task 2)<br> Client Module (Advanced Task)<br>Report Writing | <br/><br/>50% |
 
 
 ## Database Design
-We design our database on the base of project I. All related SQLs are in `sql` directory.
+We design our database on the base of project I. All related SQLs are in `src/main/sql` directory.
 
 ### ER Map
 ![](images/Project2.drawio.png)
@@ -41,6 +41,13 @@ GRANT SELECT ON TABLE city,company,company_manager,container,courier,item,office
 Because while executing `newItem()` method, there may be some new cities, ships or containers which may not exist in the system, so we grant `insert` permission to courier.
 
 No special description for other users.  
+
+### SHA-256 Hash for Password
+Out of the consideration of security, we add an additional function of storing password after hashing. 
+
+To enable this function, you should set `encryptPassword` to `true` in `ConnectionManager.java` **before importing data**. 
+
+However, calculating SHA-256 costs a lot of time. For more convenient testing, we disable the function by default.
 
 ## Basic API Implementation
 
