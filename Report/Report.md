@@ -2,10 +2,10 @@
 
 
 ## Members & Workload
-|         Name         |     Student ID     |                         Contribution                         |     Ratio     |
-| :------------------: | :----------------: | :----------------------------------------------------------: | :-----------: |
-|  <br><br>Xuanyu Liu  | <br/><br/>12110408 | Database Design (Task 1) <br> SUSTC Manager Module (Task 2) <br> Courier Module (Task 2) <br> Backend Module (Advanced Task) <br> Report Writing | <br/><br/>50% |
-| <br/><br/>Zexin Feng | <br/><br/>12110104 | Table Manipulation Module (Task 2)<br>Company Manager Module (Task 2)<br>Seaport Officer Module (Task 2)<br> Client Module (Advanced Task)<br>Report Writing | <br/><br/>50% |
+|    Name    | Student ID |                         Contribution                         | Ratio |
+| :--------: | :--------: | :----------------------------------------------------------: | :---: |
+| Xuanyu Liu |  12110408  | Database Design (Task 1) <br> SUSTC Manager Module (Task 2) <br> Courier Module (Task 2) <br> Backend Module (Advanced Task) <br> Report Writing |  50%  |
+| Zexin Feng |  12110104  | Table Manipulation Module (Task 2)<br>Company Manager Module (Task 2)<br>Seaport Officer Module (Task 2)<br> Client Module (Advanced Task)<br>Report Writing |  50%  |
 
 
 ## Database Design
@@ -477,7 +477,7 @@ switch (state) {
 }
 ```
 
-## Adcanced Task
+## Advanced Task
 
 ### Backend
 #### Introduction
@@ -576,9 +576,21 @@ Please turn to API's corresponding `handler` to get detailed information. For ev
 
 ### Client
 
-ui:
+Basely, we use command line to simulate the client, the file structure is shown below:
 
-login
+```
+📦FrontEnd
+ ┣ 📜login.py
+ ┣ 📜main.py
+ ┣ 📜Courier.py
+ ┣ 📜Officer.py
+ ┣ 📜companyManager.py
+ ┗ 📜sustcManager.py
+```
+
+First we run `python main.py` it will use login.py to get the login info.
+
+login.py is use to choose the role and enter the username and password:
 
 ```python
 print("============================================================")
@@ -590,7 +602,9 @@ print("|  4. SUSTCManager                      Q. Exit            |")
 print("============================================================")
 ```
 
-Then input username and password:
+Then input username and password: 
+
+If you login successfully then you can chose the operation. The menu will jump to next menu automatically.
 
 ```python
 	print("============================================================")
@@ -662,4 +676,7 @@ def company_count(username, passwd):
 
 ```
 
-That's all, thanks
+It us requests module to get http request and result from back end. The result is in json format, so we can just analysis the json result to get the information we want.
+
+As long as we have other role or operation. We simply just add it in the menu and wrote a handler function of it. The client will works fine.
+
