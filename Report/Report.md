@@ -583,9 +583,11 @@ Basely, we use command line to simulate the client, the file structure is shown 
  ┣ 📜login.py
  ┣ 📜main.py
  ┣ 📜Courier.py
+ ┣ 📜Courier.py
  ┣ 📜Officer.py
  ┣ 📜companyManager.py
- ┗ 📜sustcManager.py
+ ┣ 📜sustcManager.py
+ ┗ 📜requirement.txt
 ```
 
 First we run `python main.py` it will use login.py to get the login info.
@@ -680,3 +682,6 @@ It us requests module to get http request and result from back end. The result i
 
 As long as we have other role or operation. We simply just add it in the menu and wrote a handler function of it. The client will works fine.
 
+The requirement.txt includes all the module we need in the front end.
+
+And that's all, thank you.
